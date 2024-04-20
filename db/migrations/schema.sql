@@ -9,17 +9,17 @@ CREATE TABLE Specialization (
 );
 
 CREATE TABLE Hike_type (
-  id    SERIAL 			PRIMARY KEY,
-  name  VARCHAR(100) 	NOT NULL UNIQUE
+	id    SERIAL 		PRIMARY KEY,
+	name  VARCHAR(100) 	NOT NULL UNIQUE
 );
 
 CREATE TABLE Tourist (
 	id        	SERIAL 			PRIMARY KEY,
 	full_name 	VARCHAR(255) 	NOT NULL,
-	gender    	VARCHAR(7) 		CHECK (type IN ('male', 'female')),
-	birthday  	DATE     		CHECK ( birthday >= to_date('01.01.1900', 'DD-MM-YYYY')),
-	email     	TEXT,
-	phone     	VARCHAR(12),	
+	gender    	VARCHAR(7) 		CHECK (gender IN ('male', 'female')),
+	birthday  	DATE     		DATE CHECK (birthday >= '1900-01-01'::date AND birthday <= CURRENT_DATE),
+	email     	TEXT			CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
+	phone     	VARCHAR(15)		CHECK (phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'),
 	category  	SMALLINT 		NOT NULL CHECK (category >= 1 AND category <= 10),
 	type_id   	INTEGER 		NOT NULL REFERENCES Tourist_type(id)
 );
@@ -28,7 +28,7 @@ CREATE TABLE Trainer (
 	id                	INTEGER 	PRIMARY KEY  REFERENCES Tourist(id),
 	salary            	MONEY,
 	hire_date         	DATE,
-	specialization_id 	INTEGER   	REFERENCES Specialization(id),
+	specialization_id 	INTEGER   	NOT NULL REFERENCES Specialization(id),
 	section_id        	INTEGER 	NOT NULL REFERENCES Section(id)
 );
 
@@ -36,23 +36,23 @@ CREATE TABLE SuperVisor (
 	id          SERIAL 			PRIMARY KEY,
 	full_name   VARCHAR(255) 	NOT NULL,
 	salary      MONEY,
-	hire_date   DATE,
-	birthday    DATE,
-	email       TEXT,
-	phone       VARCHAR(12), 
+	hire_date   DATE			NOT NULL CHECK (hire_date <= CURRENT_DATE),
+	birthday    DATE			CHECK (birthday <= CURRENT_DATE),
+	email       TEXT			CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
+	phone       VARCHAR(15)		CHECK (phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'), 
 );
 
 CREATE TABLE Section (
-	id            SERIAL PRIMARY KEY,
-	name          VARCHAR(255) NOT NULL,
-	supervisor_id INTEGER UNIQUE REFERENCES SuperVisor(id)
+	id            SERIAL 		PRIMARY KEY,
+	name          VARCHAR(100) 	NOT NULL,
+	supervisor_id INTEGER 		NOT NULL UNIQUE REFERENCES SuperVisor(id)
 );
 
 CREATE TABLE Group (
 	id          SERIAL 			PRIMARY KEY,
-	name        VARCHAR(255) 	NOT NULL,
-	description VARCHAR(255),
-	section_id  INTEGER 		REFERENCES Section(id),
+	name        VARCHAR(100) 	NOT NULL,
+	description TEXT,
+	section_id  INTEGER 		NOT NULL, REFERENCES Section(id),
 	trainer_id  INTEGER 		REFERENCES Trainer(id)
 );
 
@@ -64,13 +64,13 @@ CREATE TABLE Tourist_Groups (
 
 CREATE TABLE Training (
 	id          SERIAL 			PRIMARY KEY,
-	plane_date  TIMESTAMP,
+	plane_date  TIMESTAMP		NOT NULL
 	real_date   TIMESTAMP,
 	place       TEXT,
 	duration    INTERVAL,
 	trainer_id  INTEGER 		REFERENCES Trainer(id),
 	group_id    INTEGER 		REFERENCES Group(id),
-	section_id  INTEGER 		REFERENCES Section(id)
+	section_id  INTEGER 		NOT NULL REFERENCES Section(id)
 );
 
 CREATE TABLE Attendance (
@@ -81,7 +81,7 @@ CREATE TABLE Attendance (
 
 CREATE TABLE Route (
 	id                  SERIAL 			PRIMARY KEY,
-	name                VARCHAR(255) 	NOT NULL,
+	name                VARCHAR(100) 	NOT NULL,
 	length_meters       INTEGER,
 	duration_hours      INTERVAL,
 	difficulty_category SMALLINT 		NOT NULL CHECK (category >= 1 AND category <= 10),
@@ -94,16 +94,16 @@ CREATE TABLE Hike (
 	real_start_date TIMESTAMPTZ,
 	real_end_date   TIMESTAMPTZ,
 	is_planned      BOOLEAN,
-	hike_type_id    INTEGER 		REFERENCES Hike_type(id),
-	instructor_id   INTEGER 		REFERENCES Tourist(id),
-	route_id        INTEGER 		REFERENCES Route(id)
+	hike_type_id    INTEGER 		NOT NULL, REFERENCES Hike_type(id),
+	instructor_id   INTEGER 		NOT NULL, REFERENCES Tourist(id),
+	route_id        INTEGER 		NOT NULL, REFERENCES Route(id)
 );
 
 CREATE TABLE Diary (
 	id      SERIAL 			PRIMARY KEY,
 	date    TIMESTAMPTZ,
 	content TEXT,
-	hike_id INTEGER 		REFERENCES Hike(id)
+	hike_id INTEGER 		NOT NULL, REFERENCES Hike(id)
 );
 
 CREATE TABLE Checkpoint (
@@ -116,7 +116,7 @@ CREATE TABLE Checkpoint (
 
 CREATE TABLE Route_Checkpoints (
 	id            SERIAL 	UNIQUE,
-	point_number  SMALLINT,
+	point_number  SMALLINT	CHECK (point_number >= 1),
 	route_id      INTEGER 	REFERENCES Route(id),
 	checkpoint_id INTEGER 	REFERENCES Checkpoint(id),
 	PRIMARY KEY (point_number, route_id, checkpoint_id)
