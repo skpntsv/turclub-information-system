@@ -13,21 +13,28 @@ CREATE TABLE Hike_type (
 	name  VARCHAR(100) 	NOT NULL UNIQUE
 );
 
+CREATE TABLE Contacts (
+	id 				SERIAL
+	email 			VARCHAR(256) 	CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
+	phone_1 		VARCHAR(15) 	NOT NULL CHECK (phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'),
+	phone_2 		VARCHAR(15) 	CHECK (phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'),
+	emergency_phone VARCHAR(15) 	NOT NULL CHECK (phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$')
+);
+
 CREATE TABLE Tourist (
 	id        	SERIAL 			PRIMARY KEY,
 	full_name 	VARCHAR(255) 	NOT NULL,
 	gender    	VARCHAR(7) 		CHECK (gender IN ('male', 'female')),
-	birthday  	DATE     		DATE CHECK (birthday >= '1900-01-01'::date AND birthday <= CURRENT_DATE),
-	email     	TEXT			CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
-	phone     	VARCHAR(15)		CHECK (phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'),
+	birthday  	DATE     		DATE CHECK (birthday <= CURRENT_DATE),
 	category  	SMALLINT 		NOT NULL CHECK (category >= 1 AND category <= 10),
-	type_id   	INTEGER 		NOT NULL REFERENCES Tourist_type(id)
+	type_id   	INTEGER 		NOT NULL REFERENCES Tourist_type(id),
+	contact_id	INTEGER			NOT NULL REFERENCES Contacts(id)
 );
 
 CREATE TABLE Trainer (
 	id                	INTEGER 	PRIMARY KEY  REFERENCES Tourist(id),
 	salary            	MONEY,
-	hire_date         	DATE,
+	hire_date         	DATE		NOT NULL CHECK (hire_date <= CURRENT_DATE),
 	specialization_id 	INTEGER   	NOT NULL REFERENCES Specialization(id),
 	section_id        	INTEGER 	NOT NULL REFERENCES Section(id)
 );
@@ -38,8 +45,7 @@ CREATE TABLE SuperVisor (
 	salary      MONEY,
 	hire_date   DATE			NOT NULL CHECK (hire_date <= CURRENT_DATE),
 	birthday    DATE			CHECK (birthday <= CURRENT_DATE),
-	email       TEXT			CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
-	phone       VARCHAR(15)		CHECK (phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'), 
+	contact_id	INTEGER			NOT NULL REFERENCES Contacts(id)
 );
 
 CREATE TABLE Section (
@@ -64,7 +70,7 @@ CREATE TABLE Tourist_Groups (
 
 CREATE TABLE Training (
 	id          SERIAL 			PRIMARY KEY,
-	plane_date  TIMESTAMP		NOT NULL
+	plane_date  TIMESTAMP		NOT NULL,
 	real_date   TIMESTAMP,
 	place       TEXT,
 	duration    INTERVAL,
