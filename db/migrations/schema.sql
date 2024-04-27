@@ -15,17 +15,17 @@ CREATE TABLE Hike_type (
 
 CREATE TABLE Contacts (
 	id 				SERIAL
-	email 			VARCHAR(256) 	CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
-	phone_1 		VARCHAR(15) 	NOT NULL CHECK (phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'),
-	phone_2 		VARCHAR(15) 	CHECK (phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'),
-	emergency_phone VARCHAR(15) 	NOT NULL CHECK (phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$')
+	email 			VARCHAR(256) 	NOT NULL CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
+	main_phone 		VARCHAR(15) 	NOT NULL CHECK (main_phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'),
+	reserve_phone	VARCHAR(15) 	CHECK (reserve_phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'),
+	emergency_phone VARCHAR(15) 	CHECK (emergency_phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$')
 );
 
 CREATE TABLE Tourist (
 	id        	SERIAL 			PRIMARY KEY,
 	full_name 	VARCHAR(255) 	NOT NULL,
-	gender    	VARCHAR(7) 		CHECK (gender IN ('male', 'female')),
-	birthday  	DATE     		DATE CHECK (birthday <= CURRENT_DATE),
+	gender    	VARCHAR(7) 		NOT NULL CHECK (gender IN ('male', 'female')),
+	birthday  	DATE     		NOT NULL CHECK (birthday <= CURRENT_DATE),
 	category  	SMALLINT 		NOT NULL CHECK (category >= 1 AND category <= 10),
 	type_id   	INTEGER 		NOT NULL REFERENCES Tourist_type(id),
 	contact_id	INTEGER			NOT NULL REFERENCES Contacts(id)
@@ -33,8 +33,8 @@ CREATE TABLE Tourist (
 
 CREATE TABLE Trainer (
 	id                	INTEGER 	PRIMARY KEY  REFERENCES Tourist(id),
-	salary            	MONEY,
-	hire_date         	DATE		NOT NULL CHECK (hire_date <= CURRENT_DATE),
+	salary            	MONEY		NOT NULL,
+	hire_date         	DATE		NOT NULL,
 	specialization_id 	INTEGER   	NOT NULL REFERENCES Specialization(id),
 	section_id        	INTEGER 	NOT NULL REFERENCES Section(id)
 );
@@ -42,21 +42,22 @@ CREATE TABLE Trainer (
 CREATE TABLE SuperVisor (
 	id          SERIAL 			PRIMARY KEY,
 	full_name   VARCHAR(255) 	NOT NULL,
-	salary      MONEY,
-	hire_date   DATE			NOT NULL CHECK (hire_date <= CURRENT_DATE),
+	salary      MONEY			NOT NULL,
+	hire_date   DATE			NOT NULL,
 	birthday    DATE			CHECK (birthday <= CURRENT_DATE),
 	contact_id	INTEGER			NOT NULL REFERENCES Contacts(id)
 );
 
 CREATE TABLE Section (
 	id            SERIAL 		PRIMARY KEY,
-	name          VARCHAR(100) 	NOT NULL,
+	name          VARCHAR(100) 	NOT NULL UNIQUE,
+	description	  TEXT,
 	supervisor_id INTEGER 		NOT NULL UNIQUE REFERENCES SuperVisor(id)
 );
 
 CREATE TABLE Group (
 	id          SERIAL 			PRIMARY KEY,
-	name        VARCHAR(100) 	NOT NULL,
+	name        VARCHAR(100) 	NOT NULL UNIQUE,
 	description TEXT,
 	section_id  INTEGER 		NOT NULL, REFERENCES Section(id),
 	trainer_id  INTEGER 		REFERENCES Trainer(id)
@@ -87,9 +88,9 @@ CREATE TABLE Attendance (
 
 CREATE TABLE Route (
 	id                  SERIAL 			PRIMARY KEY,
-	name                VARCHAR(100) 	NOT NULL,
+	name                VARCHAR(100) 	NOT NULL UNIQUE,
 	length_meters       INTEGER,
-	duration_hours      INTERVAL,
+	duration      		INTERVAL,
 	difficulty_category SMALLINT 		NOT NULL CHECK (category >= 1 AND category <= 10),
 	description         TEXT
 );
@@ -99,7 +100,7 @@ CREATE TABLE Hike (
 	plan_start_date TIMESTAMPTZ 	NOT NULL,
 	real_start_date TIMESTAMPTZ,
 	real_end_date   TIMESTAMPTZ,
-	is_planned      BOOLEAN,
+	is_planned      BOOLEAN			DEFAULT: 0
 	hike_type_id    INTEGER 		NOT NULL, REFERENCES Hike_type(id),
 	instructor_id   INTEGER 		NOT NULL, REFERENCES Tourist(id),
 	route_id        INTEGER 		NOT NULL, REFERENCES Route(id)
@@ -107,8 +108,8 @@ CREATE TABLE Hike (
 
 CREATE TABLE Diary (
 	id      SERIAL 			PRIMARY KEY,
-	date    TIMESTAMPTZ,
-	content TEXT,
+	date    TIMESTAMPTZ		NOT NULL,
+	content TEXT			NOT NULL,
 	hike_id INTEGER 		NOT NULL, REFERENCES Hike(id)
 );
 
