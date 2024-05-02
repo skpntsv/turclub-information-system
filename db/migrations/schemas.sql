@@ -16,9 +16,9 @@ CREATE TABLE IF NOT EXISTS Hike_type (
 CREATE TABLE IF NOT EXISTS Contacts (
 	id 				SERIAL 			PRIMARY KEY,
 	email 			VARCHAR(256) 	NOT NULL CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
-	main_phone 		VARCHAR(15) 	NOT NULL CHECK (main_phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'),
-	reserve_phone	VARCHAR(15) 	CHECK (reserve_phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'),
-	emergency_phone VARCHAR(15) 	CHECK (emergency_phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$')
+	main_phone 		VARCHAR(16) 	NOT NULL CHECK (main_phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'),
+	reserve_phone	VARCHAR(16) 	CHECK (reserve_phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$'),
+	emergency_phone VARCHAR(16) 	CHECK (emergency_phone ~* '^(\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}$')
 );
 
 CREATE TABLE IF NOT EXISTS Tourist (
@@ -119,16 +119,16 @@ CREATE TABLE IF NOT EXISTS Checkpoint (
 	id          SERIAL 			PRIMARY KEY,
 	description TEXT,
 	type        VARCHAR(7) 		CHECK (type IN ('passing', 'rest')),
-	latitude    NUMERIC(3, 7) 	CHECK (latitude >= -90 AND latitude <= 90),
-	longitude   NUMERIC(4, 7) 	CHECK (longitude >= -180 AND longitude <= 180)
+	latitude    NUMERIC(10, 7) 	CHECK (latitude >= -90 AND latitude <= 90),
+	longitude   NUMERIC(10, 7) 	CHECK (longitude >= -180 AND longitude <= 180)
 );
 
 CREATE TABLE IF NOT EXISTS Route_Checkpoints (
-	id            SERIAL 	UNIQUE,
+	id            SERIAL 	PRIMARY KEY,
 	point_number  SMALLINT	CHECK (point_number >= 1),
 	route_id      INTEGER 	REFERENCES Route(id),
 	checkpoint_id INTEGER 	REFERENCES Checkpoint(id),
-	PRIMARY KEY (point_number, route_id, checkpoint_id)
+	UNIQUE (point_number, route_id)
 );
 
 CREATE TABLE IF NOT EXISTS Sсhedule_hike_checkpoints (
