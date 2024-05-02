@@ -31,14 +31,6 @@ CREATE TABLE IF NOT EXISTS Tourist (
 	contact_id	INTEGER			NOT NULL REFERENCES Contacts(id)
 );
 
-CREATE TABLE IF NOT EXISTS Trainer (
-	id                	INTEGER 	PRIMARY KEY  REFERENCES Tourist(id),
-	salary            	MONEY		NOT NULL,
-	hire_date         	DATE		NOT NULL,
-	specialization_id 	INTEGER   	NOT NULL REFERENCES Specialization(id),
-	section_id        	INTEGER 	NOT NULL REFERENCES Section(id)
-);
-
 CREATE TABLE IF NOT EXISTS SuperVisor (
 	id          SERIAL 			PRIMARY KEY,
 	full_name   VARCHAR(255) 	NOT NULL,
@@ -55,17 +47,25 @@ CREATE TABLE IF NOT EXISTS Section (
 	supervisor_id INTEGER 		NOT NULL UNIQUE REFERENCES SuperVisor(id)
 );
 
-CREATE TABLE IF NOT EXISTS Group (
+CREATE TABLE IF NOT EXISTS Trainer (
+	id                	INTEGER 	PRIMARY KEY  REFERENCES Tourist(id),
+	salary            	MONEY		NOT NULL,
+	hire_date         	DATE		NOT NULL,
+	specialization_id 	INTEGER   	NOT NULL REFERENCES Specialization(id),
+	section_id        	INTEGER 	NOT NULL REFERENCES Section(id)
+);
+
+CREATE TABLE IF NOT EXISTS Groups (
 	id          SERIAL 			PRIMARY KEY,
 	name        VARCHAR(100) 	NOT NULL UNIQUE,
 	description TEXT,
-	section_id  INTEGER 		NOT NULL, REFERENCES Section(id),
+	section_id  INTEGER 		NOT NULL REFERENCES Section(id),
 	trainer_id  INTEGER 		REFERENCES Trainer(id)
 );
 
 CREATE TABLE IF NOT EXISTS Tourist_Groups (
 	tourist_id  INTEGER 	REFERENCES Tourist(id),
-	group_id    INTEGER 	REFERENCES Group(id),
+	group_id    INTEGER 	REFERENCES Groups(id),
 	PRIMARY KEY (tourist_id, group_id)
 );
 
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS Training (
 	place       TEXT,
 	duration    INTERVAL,
 	trainer_id  INTEGER 		REFERENCES Trainer(id),
-	group_id    INTEGER 		REFERENCES Group(id),
+	group_id    INTEGER 		REFERENCES Groups(id),
 	section_id  INTEGER 		NOT NULL REFERENCES Section(id)
 );
 
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS Route (
 	name                VARCHAR(100) 	NOT NULL UNIQUE,
 	length_meters       INTEGER,
 	duration      		INTERVAL,
-	difficulty_category SMALLINT 		NOT NULL CHECK (category >= 1 AND category <= 10),
+	difficulty_category SMALLINT 		NOT NULL CHECK (difficulty_category >= 1 AND difficulty_category <= 10),
 	description         TEXT
 );
 
@@ -101,9 +101,9 @@ CREATE TABLE IF NOT EXISTS Hike (
 	real_start_date TIMESTAMPTZ,
 	real_end_date   TIMESTAMPTZ,
 	is_planned      BOOLEAN			NOT NULL DEFAULT false,
-	hike_type_id    INTEGER 		NOT NULL, REFERENCES Hike_type(id),
-	instructor_id   INTEGER 		NOT NULL, REFERENCES Tourist(id),
-	route_id        INTEGER 		NOT NULL, REFERENCES Route(id)
+	hike_type_id    INTEGER 		NOT NULL REFERENCES Hike_type(id),
+	instructor_id   INTEGER 		NOT NULL REFERENCES Tourist(id),
+	route_id        INTEGER 		NOT NULL REFERENCES Route(id)
     CONSTRAINT check_end_date_after_start_date 
         CHECK ((real_end_date IS NULL) OR (real_end_date > real_start_date))
 );
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS Diary (
 	id      SERIAL 			PRIMARY KEY,
 	date    TIMESTAMPTZ		NOT NULL,
 	content TEXT			NOT NULL,
-	hike_id INTEGER 		NOT NULL, REFERENCES Hike(id)
+	hike_id INTEGER 		NOT NULL REFERENCES Hike(id)
 );
 
 CREATE TABLE IF NOT EXISTS Checkpoint (
