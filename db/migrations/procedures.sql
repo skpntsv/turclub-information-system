@@ -1,39 +1,28 @@
-
-
-CREATE OR REPLACE FUNCTION update_tourist_level()
-RETURNS TRIGGER AS
-$$
+CREATE OR REPLACE FUNCTION check_hike_category_change()
+RETURNS TRIGGER AS $$
 DECLARE
-    hike_difficulty SMALLINT;
+    d_category SMALLINT;
 BEGIN
-    -- Получаем уровень сложности похода
-    SELECT difficulty_category INTO hike_difficulty
-    FROM Hike
-    WHERE id = NEW.hike_id;
-
-    -- Проверяем, есть ли дата окончания похода и is_planned равно 1
-    IF NEW.real_end_date IS NOT NULL AND NEW.is_planned THEN
-        -- Проверяем уровень каждого туриста
-        FOR tourist_rec IN
-            SELECT t.id, t.category
-            FROM Tourist t
-            JOIN Hike_Tourists ht ON t.id = ht.tourist_id
-            WHERE ht.hike_id = NEW.hike_id
-        LOOP
-            IF tourist_rec.category < hike_difficulty THEN
-                -- Повышаем уровень туриста до уровня похода
-                UPDATE Tourist
-                SET category = hike_difficulty
-                WHERE id = tourist_rec.id;
-            END IF;
-        END LOOP;
+    -- Проверяем, был ли изменен тип похода с непланового на плановый и закончился ли поход
+    IF (OLD.is_planned = false AND NEW.is_planned = true AND NEW.real_end_date IS NOT NULL) OR
+       (OLD.real_end_date IS NULL AND NEW.real_end_date IS NOT NULL AND NEW.is_planned = true) THEN
+        -- Смотрим какая была сложность у похода
+        SELECT difficulty_category into d_category
+                                   from Route
+                                   WHERE id = NEW.route_id;
+        -- Повышаем уровень сложности у всех участников этого похода
+        UPDATE Tourist
+        SET category = GREATEST(category, d_category)
+        FROM Hike_Tourists
+        WHERE Hike_Tourists.hike_id = NEW.id
+        AND Hike_Tourists.tourist_id = Tourist.id;
     END IF;
-
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_tourist_level_trigger
-AFTER INSERT OR UPDATE ON Hike
+CREATE TRIGGER hike_category_change_trigger
+AFTER INSERT OR UPDATE OF is_planned, real_end_date ON Hike
 FOR EACH ROW
-EXECUTE FUNCTION update_tourist_level();
+EXECUTE FUNCTION check_hike_category_change();
+
