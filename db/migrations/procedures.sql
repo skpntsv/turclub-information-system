@@ -26,3 +26,30 @@ AFTER INSERT OR UPDATE OF is_planned, real_end_date ON Hike
 FOR EACH ROW
 EXECUTE FUNCTION check_hike_category_change();
 
+
+------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION check_instructor_assignment()
+RETURNS TRIGGER AS $$
+DECLARE
+    d_category SMALLINT;
+BEGIN
+    -- Проверяем, что инструктор - это спортсмен или тренер
+    IF NOT EXISTS (SELECT 1 FROM Tourist WHERE id = NEW.instructor_id AND tourist.type_id IN (2, 3)) THEN
+        RAISE EXCEPTION 'Инструктор должен быть спортсменом или тренером';
+    END IF;
+    -- Смотрим какая была сложность у похода
+    SELECT difficulty_category into d_category
+                               from Route
+                               WHERE id = NEW.route_id;
+    IF NOT EXISTS (SELECT 1 FROM Tourist WHERE id = NEW.instructor_id AND tourist.category >= d_category) THEN
+        RAISE EXCEPTION 'У инструктора недостаточная категория сложности для данного похода';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER instructor_assignment_trigger
+BEFORE INSERT OR UPDATE OF instructor_id ON Hike
+FOR EACH ROW
+EXECUTE FUNCTION check_instructor_assignment();
