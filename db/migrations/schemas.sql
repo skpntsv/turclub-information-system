@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS Tourist (
 	full_name 	VARCHAR(255) 	NOT NULL,
 	gender    	VARCHAR(7) 		NOT NULL CHECK (gender IN ('male', 'female')),
 	birthday  	DATE     		NOT NULL CHECK (birthday <= CURRENT_DATE),
-	category  	SMALLINT 		NOT NULL CHECK (category >= 1 AND category <= 10),
+	category  	SMALLINT 		NOT NULL CHECK (category >= 0 AND category <= 10) DEFAULT 0,
 	type_id   	INTEGER 		NOT NULL REFERENCES Tourist_type(id),
 	contact_id	INTEGER			NOT NULL REFERENCES Contacts(id)
 );
