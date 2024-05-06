@@ -26,7 +26,6 @@ AFTER INSERT OR UPDATE OF is_planned, real_end_date ON Hike
 FOR EACH ROW
 EXECUTE FUNCTION check_hike_category_change();
 
-
 ------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION check_instructor_assignment()
@@ -53,3 +52,30 @@ CREATE TRIGGER instructor_assignment_trigger
 BEFORE INSERT OR UPDATE OF instructor_id ON Hike
 FOR EACH ROW
 EXECUTE FUNCTION check_instructor_assignment();
+
+---------------------------------------------------
+
+CREATE OR REPLACE FUNCTION check_participant_in_hike_limit()
+RETURNS TRIGGER AS $$
+DECLARE
+    participant_count INTEGER;
+BEGIN
+    -- Получаем количество участников для данного похода
+    SELECT COUNT(*)
+    INTO participant_count
+    FROM Hike_Tourists
+    WHERE hike_id = NEW.hike_id;
+
+    -- Проверяем, что количество участников не превышает 15
+    IF participant_count >= 15 THEN
+        RAISE EXCEPTION 'Максимальное количество участников в походе - 15';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_participant_in_hike_limit_trigger
+BEFORE INSERT OR UPDATE OF hike_id ON Hike_Tourists
+FOR EACH ROW
+EXECUTE FUNCTION check_participant_in_hike_limit();
