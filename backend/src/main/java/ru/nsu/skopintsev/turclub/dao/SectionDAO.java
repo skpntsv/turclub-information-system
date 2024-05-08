@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public class SectionDAO implements DAO<Section, Long> {
-
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired

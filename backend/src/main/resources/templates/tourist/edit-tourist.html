@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Edit Tourist</title>
@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>Edit Tourist</h1>
-<form th:action="@{'/update/' + ${tourist.id}}" th:object="${tourist}" method="post">
+<form th:action="@{'/tourist/update/' + ${tourist.id}}" th:object="${tourist}" method="post">
     <input type="hidden" name="id" th:value="*{id}" />
 
     <label for="fullName">Full Name:</label>
@@ -30,6 +30,6 @@
 
     <button type="submit">Update</button>
 </form>
-<a href="/">Back to List</a>
+<a href="/tourist">Back to List</a>
 </body>
 </html>

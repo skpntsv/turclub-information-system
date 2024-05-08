@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Tourist Management</title>
@@ -8,13 +8,13 @@
 <body>
 <h1>Tourist List</h1>
 <div>
-    <a href="/new">Add New Tourist</a>
+    <a href="tourist/new">Add New Tourist</a>
 </div>
 <table>
     <thead>
     <tr>
         <th>ID</th>
-        <th>Full Name</th>
+        <th>ФИО</th>
         <th>Gender</th>
         <th>Birthday</th>
         <th>Category</th>
@@ -33,11 +33,12 @@
         <td th:text="${tourist.typeId}"></td>
         <td th:text="${tourist.contactId}"></td>
         <td>
-            <a th:href="@{'/edit/' + ${tourist.id}}">Edit</a>
-            <a th:href="@{'/delete/' + ${tourist.id}}">Delete</a>
+            <a th:href="@{'/tourist/edit/' + ${tourist.id}}">Edit</a>
+            <a th:href="@{'/tourist/delete/' + ${tourist.id}}">Delete</a>
         </td>
     </tr>
     </tbody>
 </table>
+<a href="/">Back to menu</a>
 </body>
 </html>
