@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Информационная система туристического клуба</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:fragment="content">
+    <h1>Добро пожаловать!</h1>
+    <nav>
+        <ul>
+            <li><a href="/tourist" class="btn btn-primary">Управление туристами</a></li>
+            <li><a href="/hike" class="btn btn-primary">Управление походами</a></li>
+            <li><a href="/group" class="btn btn-primary">Управление группами</a></li>
+            <li><a href="/section" class="btn btn-primary">Управления секциями</a></li>
+            <li><a href="/training" class="btn btn-primary">Управление занятиями</a></li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>
