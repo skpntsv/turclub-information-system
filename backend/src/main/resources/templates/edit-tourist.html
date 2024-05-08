@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Tourist</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<h1>Edit Tourist</h1>
+<form th:action="@{'/update/' + ${tourist.id}}" th:object="${tourist}" method="post">
+    <input type="hidden" name="id" th:value="*{id}" />
+
+    <label for="fullName">Full Name:</label>
+    <input type="text" id="fullName" name="fullName" th:value="*{fullName}" /><br/>
+
+    <label for="gender">Gender:</label>
+    <input type="text" id="gender" name="gender" th:value="*{gender}" /><br/>
+
+    <label for="birthday">Birthday:</label>
+    <input type="date" id="birthday" name="birthday" th:value="*{birthday}" /><br/>
+
+    <label for="category">Category:</label>
+    <input type="number" id="category" name="category" th:value="*{category}" /><br/>
+
+    <label for="typeId">Type ID:</label>
+    <input type="number" id="typeId" name="typeId" th:value="*{typeId}" /><br/>
+
+    <label for="contactId">Contact ID:</label>
+    <input type="number" id="contactId" name="contactId" th:value="*{contactId}" /><br/>
+
+    <button type="submit">Update</button>
+</form>
+<a href="/">Back to List</a>
+</body>
+</html>

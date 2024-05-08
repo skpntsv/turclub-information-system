@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Tourist</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<h1>Add New Tourist</h1>
+<form th:action="@{/save}" th:object="${tourist}" method="post">
+    <label for="fullName">Full Name:</label>
+    <input type="text" id="fullName" name="fullName" th:value="*{fullName}" /><br/>
+
+    <label for="gender">Gender:</label>
+    <input type="text" id="gender" name="gender" th:value="*{gender}" /><br/>
+
+    <label for="birthday">Birthday:</label>
+    <input type="date" id="birthday" name="birthday" th:value="*{birthday}" /><br/>
+
+    <label for="category">Category:</label>
+    <input type="number" id="category" name="category" th:value="*{category}" /><br/>
+
+    <label for="typeId">Type ID:</label>
+    <input type="number" id="typeId" name="typeId" th:value="*{typeId}" /><br/>
+
+    <label for="contactId">Contact ID:</label>
+    <input type="number" id="contactId" name="contactId" th:value="*{contactId}" /><br/>
+
+    <button type="submit">Save</button>
+</form>
+<a href="/">Back to List</a>
+</body>
+</html>

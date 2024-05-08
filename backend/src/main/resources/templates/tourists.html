@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tourist Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<h1>Tourist List</h1>
+<div>
+    <a href="/new">Add New Tourist</a>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Full Name</th>
+        <th>Gender</th>
+        <th>Birthday</th>
+        <th>Category</th>
+        <th>Type ID</th>
+        <th>Contact ID</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="tourist : ${listTourists}">
+        <td th:text="${tourist.id}"></td>
+        <td th:text="${tourist.fullName}"></td>
+        <td th:text="${tourist.gender}"></td>
+        <td th:text="${#dates.format(tourist.birthday, 'yyyy-MM-dd')}"></td>
+        <td th:text="${tourist.category}"></td>
+        <td th:text="${tourist.typeId}"></td>
+        <td th:text="${tourist.contactId}"></td>
+        <td>
+            <a th:href="@{'/edit/' + ${tourist.id}}">Edit</a>
+            <a th:href="@{'/delete/' + ${tourist.id}}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

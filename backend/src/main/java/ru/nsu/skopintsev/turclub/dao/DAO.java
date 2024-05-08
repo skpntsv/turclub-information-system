@@ -1,12 +1,11 @@
 package ru.nsu.skopintsev.turclub.dao;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface DAO<T, ID> {
+public interface DAO<T, E> {
     List<T> findAll();
-    Optional<T> findById(ID id);
-    void save(T t);
-    void update(T t);
-    void deleteById(int id);
+    T findById(E id);
+    int save(T t);
+    int update(T t);
+    int deleteById(E id);
 }
