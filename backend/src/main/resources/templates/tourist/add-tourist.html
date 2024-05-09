@@ -7,42 +7,42 @@
 </head>
 <body>
 <h1>Add New Tourist</h1>
-<form th:action="@{/tourist/save}" th:object="${tourist}" method="post">
+<form th:action="@{/tourist/save}" method="post">
     <label for="fullName">ФИО:</label>
-    <input type="text" id="fullName" name="fullName" th:value="*{fullName}" required/><br/>
+    <input type="text" id="fullName" name="fullName" th:value="${tourist.fullName}" required/><br/>
 
     <label for="gender">Пол:</label>
-    <select id="gender" name="gender" th:value="*{gender}">
+    <select id="gender" name="gender" th:value="${tourist.gender}">
         <option value="">Выберите пол</option>
-        <option value="male" th:selected="*{gender} == 'male'">Мужской</option>
-        <option value="female" th:selected="*{gender} == 'female'">Женский</option>
+        <option value="male" th:selected="${tourist.gender} == 'male'">Мужской</option>
+        <option value="female" th:selected="${tourist.gender} == 'female'">Женский</option>
     </select><br/>
 
     <label for="birthday">Дата рождения:</label >
-    <input type="date" id="birthday" name="birthday" th:value="*{birthday}" required/><br/>
+    <input type="date" id="birthday" name="birthday" th:value="${tourist.birthday}" required/><br/>
 
-    <label for="section">Секция:</label>
-    <select id="section" name="section.id">
-        <option th:each="section : ${sections}"
-                th:value="${section.id}"
-                th:text="${section.name}">Section name</option>
-    </select><br/>
+<!--    <label for="section">Секция:</label>-->
+<!--    <select id="section" name="section.id">-->
+<!--        <option th:each="section : ${sections}"-->
+<!--                th:value="${section.id}"-->
+<!--                th:text="${section.name}">Section name</option>-->
+<!--    </select><br/>-->
 
 <!--    <label for="category">Категория сложности:</label>-->
 <!--    <input type="number" id="category" name="category" th:value="*{category}" required/><br/>-->
 
     <!-- Контактные данные -->
     <label for="main_phone">Основной телефонный номер:</label>
-    <input type="text" id="main_phone" name="contact.main_phone" required /><br/>
+    <input type="text" id="main_phone" name="main_phone" th:value="${contact.main_phone}" required /><br/>
 
     <label for="email">Электронная почта:</label>
-    <input type="email" id="email" name="contact.email" required/><br/>
+    <input type="email" id="email" name="email" th:value="${contact.email}" required/><br/>
 
     <label for="reserve_phone">Второй номер телефона:</label>
-    <input type="text" id="reserve_phone" name="contact.reserve_phone" /><br/>
+    <input type="text" id="reserve_phone" name="reserve_phone" th:field="${contact.reserve_phone}" /><br/>
 
     <label for="emergency_phone">Экстренный номер телефона:</label>
-    <input type="text" id="emergency_phone" name="contact.emergency_phone" /><br/>
+    <input type="text" id="emergency_phone" name="emergency_phone" th:field="${contact.emergency_phone}" /><br/>
 
     <button type="submit">Добавить</button>
 </form>

@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.nsu.skopintsev.turclub.models.Contacts;
-import ru.nsu.skopintsev.turclub.models.Section;
 
 import java.util.List;
 
@@ -35,6 +34,7 @@ public class ContactsDAO implements DAO<Contacts, Long> {
 
     @Override
     public int save(Contacts contacts) {
+        contacts = validContacts(contacts);
         return jdbcTemplate.update(
                 "INSERT INTO contacts (email, main_phone, reserve_phone, emergency_phone) VALUES (?, ?, ?, ?)",
                 contacts.getEmail(),
@@ -46,6 +46,7 @@ public class ContactsDAO implements DAO<Contacts, Long> {
 
     @Override
     public int update(Contacts contacts) {
+        contacts = validContacts(contacts);
         return jdbcTemplate.update(
                 "UPDATE contacts SET email = ?, main_phone = ?, reserve_phone = ?, emergency_phone = ? WHERE id = ?",
                 contacts.getEmail(),
@@ -61,5 +62,17 @@ public class ContactsDAO implements DAO<Contacts, Long> {
         return jdbcTemplate.update(
                 "DELETE FROM contacts WHERE id = ?",
                 id);
+    }
+
+    public Contacts validContacts(Contacts contacts) {
+        if (contacts.getEmergency_phone() != null && contacts.getEmergency_phone().trim().isEmpty()) {
+            contacts.setEmergency_phone(null);
+        }
+
+        if (contacts.getReserve_phone() != null && contacts.getReserve_phone().trim().isEmpty()) {
+            contacts.setReserve_phone(null);
+        }
+
+        return contacts;
     }
 }
