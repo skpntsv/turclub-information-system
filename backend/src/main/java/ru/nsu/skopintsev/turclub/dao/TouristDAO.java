@@ -11,7 +11,7 @@ import java.util.List;
 
 @Slf4j
 @Repository
-public class TouristDAO implements DAO<Tourist, Long> {
+public class TouristDAO implements DAO<Tourist, Integer> {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -28,7 +28,7 @@ public class TouristDAO implements DAO<Tourist, Long> {
     }
 
     @Override
-    public Tourist findById(Long id) {
+    public Tourist findById(Integer id) {
         return jdbcTemplate.queryForObject(
                 "SELECT * FROM tourist WHERE id = ?",
                 new BeanPropertyRowMapper<>(Tourist.class),
@@ -63,7 +63,7 @@ public class TouristDAO implements DAO<Tourist, Long> {
     }
 
     @Override
-    public int deleteById(Long id) {
+    public int deleteById(Integer id) {
         return jdbcTemplate.update(
                 "DELETE FROM tourist WHERE id = ?",
                 id);

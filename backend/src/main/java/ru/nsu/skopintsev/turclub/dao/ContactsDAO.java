@@ -34,19 +34,28 @@ public class ContactsDAO implements DAO<Contacts, Long> {
 
     @Override
     public int save(Contacts contacts) {
-        contacts = validContacts(contacts);
-        return jdbcTemplate.update(
-                "INSERT INTO contacts (email, main_phone, reserve_phone, emergency_phone) VALUES (?, ?, ?, ?)",
+        validContacts(contacts);
+
+        String sql = "INSERT INTO contacts (email, main_phone, reserve_phone, emergency_phone) VALUES (?, ?, ?, ?) RETURNING id";
+        Integer generatedId = jdbcTemplate.queryForObject(
+                sql,
+                Integer.class,
                 contacts.getEmail(),
                 contacts.getMain_phone(),
                 contacts.getReserve_phone(),
                 contacts.getEmergency_phone()
         );
+
+        if (generatedId != null) {
+            return generatedId;
+        } else {
+            throw new IllegalStateException("Failed to retrieve generated id after insert");
+        }
     }
 
     @Override
     public int update(Contacts contacts) {
-        contacts = validContacts(contacts);
+        validContacts(contacts);
         return jdbcTemplate.update(
                 "UPDATE contacts SET email = ?, main_phone = ?, reserve_phone = ?, emergency_phone = ? WHERE id = ?",
                 contacts.getEmail(),
@@ -64,7 +73,7 @@ public class ContactsDAO implements DAO<Contacts, Long> {
                 id);
     }
 
-    public Contacts validContacts(Contacts contacts) {
+    public void validContacts(Contacts contacts) {
         if (contacts.getEmergency_phone() != null && contacts.getEmergency_phone().trim().isEmpty()) {
             contacts.setEmergency_phone(null);
         }
@@ -72,7 +81,5 @@ public class ContactsDAO implements DAO<Contacts, Long> {
         if (contacts.getReserve_phone() != null && contacts.getReserve_phone().trim().isEmpty()) {
             contacts.setReserve_phone(null);
         }
-
-        return contacts;
     }
 }

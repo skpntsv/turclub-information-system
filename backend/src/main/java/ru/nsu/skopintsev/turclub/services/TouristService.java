@@ -31,10 +31,9 @@ public class TouristService {
     }
 
     public void saveTourist(Tourist tourist, Contacts contacts) {
-        // Сохраняем контактные данные
-        contactsDAO.save(contacts);
         // Связываем туриста с контактами
-        tourist.setContactId(contacts.getId());
+        tourist.setContactId(contactsDAO.save(contacts));
+        tourist.setTypeId(1);
         // Сохраняем туриста
         touristDAO.save(tourist);
     }

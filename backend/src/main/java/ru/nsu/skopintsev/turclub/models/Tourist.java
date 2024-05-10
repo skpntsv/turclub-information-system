@@ -8,11 +8,11 @@ import java.sql.Date;
 
 @Data
 public class Tourist {
-    private Long id;
+    private Integer id;
     private String fullName;
     private String gender;
     private Date birthday;
     private int category;
-    private Long typeId;
-    private Long contactId;
+    private Integer typeId;
+    private Integer contactId;
 }
