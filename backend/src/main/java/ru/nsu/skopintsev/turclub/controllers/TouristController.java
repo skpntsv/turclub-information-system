@@ -37,7 +37,6 @@ public class TouristController {
     public String showNewForm(Model model) {
         model.addAttribute("tourist", new Tourist());
         model.addAttribute("contact", new Contacts());
-        model.addAttribute("sections", sectionDAO.findAll());
         return "tourist/add-tourist";
     }
 
