@@ -12,7 +12,7 @@ SELECT
     c.email AS Email,
     c.main_phone AS Основной_телефон,
     c.reserve_phone AS "Резервный телефон",
-    c.emergency_phone AS "Срочный телефон",
+    c.emergency_phone AS "Экстренный телефон",
     g.name AS "Название группы",
     s.name AS "Название секции"
 FROM
@@ -29,4 +29,4 @@ WHERE
     (EXTRACT(YEAR FROM t.birthday) BETWEEN COALESCE(:birthday_start_year, EXTRACT(YEAR FROM t.birthday)) AND COALESCE(:birthday_end_year, EXTRACT(YEAR FROM t.birthday))) AND
     (DATE_PART('year', age(t.birthday)) BETWEEN COALESCE(:min_age, DATE_PART('year', age(t.birthday))) AND COALESCE(:max_age, DATE_PART('year', age(t.birthday))))
 ORDER BY
-    t.id;
+    t.full_name;
