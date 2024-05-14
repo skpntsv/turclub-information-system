@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS Trainer (
 	id                	INTEGER 	PRIMARY KEY  REFERENCES Tourist(id),
 	salary            	MONEY		NOT NULL,
 	hire_date         	DATE		NOT NULL,
+	termination_date	DATE,
 	specialization_id 	INTEGER   	NOT NULL REFERENCES Specialization(id),
 	section_id        	INTEGER 	NOT NULL REFERENCES Section(id)
 );
