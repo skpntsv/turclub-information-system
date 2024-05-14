@@ -32,9 +32,12 @@ CREATE OR REPLACE FUNCTION check_instructor_assignment()
 RETURNS TRIGGER AS $$
 DECLARE
     d_category SMALLINT;
+    trainer_id INTEGER;
 BEGIN
+    -- Находим, какой айди принадлежит типу "тренер"
+    SELECT id INTO trainer_id FROM Tourist_type WHERE LOWER(name) = 'тренер';
     -- Проверяем, что инструктор - это спортсмен или тренер
-    IF NOT EXISTS (SELECT 1 FROM Tourist WHERE id = NEW.instructor_id AND tourist.type_id IN (2, 3)) THEN
+    IF NOT EXISTS (SELECT 1 FROM Tourist WHERE id = NEW.instructor_id AND tourist.type_id = trainer_id) THEN
         RAISE EXCEPTION 'Инструктор должен быть спортсменом или тренером';
     END IF;
     -- Смотрим какая была сложность у похода
@@ -79,3 +82,31 @@ CREATE TRIGGER check_participant_in_hike_limit_trigger
 BEFORE INSERT OR UPDATE OF hike_id ON Hike_Tourists
 FOR EACH ROW
 EXECUTE FUNCTION check_participant_in_hike_limit();
+
+----------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION set_termination_date()
+RETURNS TRIGGER AS $$
+DECLARE
+    old_type_name TEXT;
+    new_type_name TEXT;
+BEGIN
+    -- Получаем старый и новый тип турита
+    SELECT name INTO old_type_name FROM tourist_type WHERE id = OLD.type_id;
+    SELECT name INTO new_type_name FROM tourist_type WHERE id = NEW.type_id;
+
+    -- Проверяем, был ли старый тип "тренер" и новый тип не "тренер"
+    IF UPPER(old_type_name) = 'ТРЕНЕР' AND UPPER(new_type_name) != 'ТРЕНЕР' THEN
+        -- Устанавливаем дату увольнения текущей датой
+        UPDATE trainer
+        SET termination_date = CURRENT_DATE
+        WHERE id = OLD.id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_set_termination_date
+AFTER UPDATE OF type_id ON Tourist
+FOR EACH ROW
+EXECUTE FUNCTION set_termination_date();
