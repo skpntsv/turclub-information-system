@@ -2,6 +2,7 @@ package ru.nsu.skopintsev.turclub.dao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,9 @@ import java.util.List;
 @Repository
 public class TouristDAO implements DAO<Tourist, Integer> {
     private final JdbcTemplate jdbcTemplate;
+
+    @Value("${tourist.default.type}")
+    private String defaultTouristType;
 
     @Autowired
     public TouristDAO(JdbcTemplate jdbcTemplate) {
@@ -67,5 +71,12 @@ public class TouristDAO implements DAO<Tourist, Integer> {
         return jdbcTemplate.update(
                 "DELETE FROM tourist WHERE id = ?",
                 id);
+    }
+
+    public Integer findDefaultTouristType() {
+        return jdbcTemplate.queryForObject(
+                "SELECT id FROM tourist_type WHERE UPPER(name) = UPPER(?)",
+                Integer.class,
+                defaultTouristType);
     }
 }

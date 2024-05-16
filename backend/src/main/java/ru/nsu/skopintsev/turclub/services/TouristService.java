@@ -4,7 +4,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nsu.skopintsev.turclub.dao.ContactsDAO;
@@ -20,33 +19,23 @@ import java.util.List;
 public class TouristService {
     private final TouristDAO touristDAO;
     private final ContactsDAO contactsDAO;
-    private final JdbcTemplate jdbcTemplate;
 
-    private static int defaultTouristTypeId;
-
-    @Value("${tourist.default.type}")
-    private String defaultTouristType;
+    private static Integer defaultTouristTypeId;
 
     @Value("${error.default_tourist_type_not_found}")
     private String defaultTouristTypeNotFoundMessage;
 
     @Autowired
-    public TouristService(TouristDAO touristDAO, ContactsDAO contactsDAO, JdbcTemplate jdbcTemplate) {
+    public TouristService(TouristDAO touristDAO, ContactsDAO contactsDAO) {
         this.touristDAO = touristDAO;
         this.contactsDAO = contactsDAO;
-        this.jdbcTemplate = jdbcTemplate;
     }
 
     @PostConstruct
     private void initDefaultTouristType() {
         try {
-            Integer typeId = jdbcTemplate.queryForObject(
-                    "SELECT id FROM tourist_type WHERE UPPER(name) = UPPER(?)",
-                    Integer.class,
-                    defaultTouristType
-            );
-            if (typeId != null) {
-                defaultTouristTypeId = typeId;
+            defaultTouristTypeId = touristDAO.findDefaultTouristType();
+            if (defaultTouristTypeId != null) {
                 log.info("Default tourist type ID initialized: {}", defaultTouristTypeId);
             } else {
                 throw new IllegalStateException(defaultTouristTypeNotFoundMessage);
