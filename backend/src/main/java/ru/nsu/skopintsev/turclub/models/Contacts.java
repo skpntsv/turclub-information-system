@@ -6,7 +6,7 @@ import lombok.Data;
 public class Contacts {
     private Long id;
     private String email;
-    private String main_phone;
-    private String reserve_phone;
-    private String emergency_phone;
+    private String mainPhone;
+    private String reservePhone;
+    private String emergencyPhone;
 }

@@ -32,17 +32,17 @@
 <!--    <input type="number" id="category" name="category" th:value="*{category}" required/><br/>-->
 
     <!-- Контактные данные -->
-    <label for="main_phone">Основной телефонный номер:</label>
-    <input type="text" id="main_phone" name="main_phone" th:value="${contact.main_phone}" required /><br/>
+    <label for="mainPhone">Основной телефонный номер:</label>
+    <input type="text" id="mainPhone" name="mainPhone" th:value="${contact.mainPhone}" required /><br/>
 
     <label for="email">Электронная почта:</label>
     <input type="email" id="email" name="email" th:value="${contact.email}" required/><br/>
 
-    <label for="reserve_phone">Второй номер телефона:</label>
-    <input type="text" id="reserve_phone" name="reserve_phone" th:field="${contact.reserve_phone}" /><br/>
+    <label for="reservePhone">Второй номер телефона:</label>
+    <input type="text" id="reservePhone" name="reservePhone" th:field="${contact.reservePhone}" /><br/>
 
-    <label for="emergency_phone">Экстренный номер телефона:</label>
-    <input type="text" id="emergency_phone" name="emergency_phone" th:field="${contact.emergency_phone}" /><br/>
+    <label for="emergencyPhone">Экстренный номер телефона:</label>
+    <input type="text" id="emergencyPhone" name="emergencyPhone" th:field="${contact.emergencyPhone}" /><br/>
 
     <button type="submit">Добавить</button>
 </form>

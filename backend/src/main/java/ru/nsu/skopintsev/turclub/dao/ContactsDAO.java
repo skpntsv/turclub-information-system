@@ -41,9 +41,9 @@ public class ContactsDAO implements DAO<Contacts, Long> {
                 sql,
                 Integer.class,
                 contacts.getEmail(),
-                contacts.getMain_phone(),
-                contacts.getReserve_phone(),
-                contacts.getEmergency_phone()
+                contacts.getMainPhone(),
+                contacts.getReservePhone(),
+                contacts.getEmergencyPhone()
         );
 
         if (generatedId != null) {
@@ -59,9 +59,9 @@ public class ContactsDAO implements DAO<Contacts, Long> {
         return jdbcTemplate.update(
                 "UPDATE contacts SET email = ?, main_phone = ?, reserve_phone = ?, emergency_phone = ? WHERE id = ?",
                 contacts.getEmail(),
-                contacts.getMain_phone(),
-                contacts.getReserve_phone(),
-                contacts.getEmergency_phone(),
+                contacts.getMainPhone(),
+                contacts.getReservePhone(),
+                contacts.getEmergencyPhone(),
                 contacts.getId()
         );
     }
@@ -74,12 +74,12 @@ public class ContactsDAO implements DAO<Contacts, Long> {
     }
 
     public void validContacts(Contacts contacts) {
-        if (contacts.getEmergency_phone() != null && contacts.getEmergency_phone().trim().isEmpty()) {
-            contacts.setEmergency_phone(null);
+        if (contacts.getEmergencyPhone() != null && contacts.getEmergencyPhone().trim().isEmpty()) {
+            contacts.setEmergencyPhone(null);
         }
 
-        if (contacts.getReserve_phone() != null && contacts.getReserve_phone().trim().isEmpty()) {
-            contacts.setReserve_phone(null);
+        if (contacts.getReservePhone() != null && contacts.getReservePhone().trim().isEmpty()) {
+            contacts.setReservePhone(null);
         }
     }
 }
