@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.nsu.skopintsev.turclub.models.Section;
-import ru.nsu.skopintsev.turclub.models.Tourist;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class SectionDAO implements DAO<Section, Long> {
                 "INSERT INTO section (name, description, supervisor_id) VALUES (?, ?, ?)",
                 section.getName(),
                 section.getDescription(),
-                section.getSupervisor_id()
+                section.getSupervisorId()
         );
     }
 
@@ -49,7 +48,7 @@ public class SectionDAO implements DAO<Section, Long> {
                 "UPDATE section SET name = ?, description = ?, supervisor_id = ? WHERE id = ?",
                 section.getName(),
                 section.getDescription(),
-                section.getSupervisor_id(),
+                section.getSupervisorId(),
                 section.getId()
         );
     }

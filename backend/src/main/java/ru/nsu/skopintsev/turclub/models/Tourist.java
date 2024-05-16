@@ -1,9 +1,6 @@
 package ru.nsu.skopintsev.turclub.models;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.sql.Date;
 
 @Data

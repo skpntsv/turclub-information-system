@@ -7,5 +7,5 @@ public class Section {
     private Long id;
     private String name;
     private String description;
-    private Integer supervisor_id;
+    private Integer supervisorId;
 }
