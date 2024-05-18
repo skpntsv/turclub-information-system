@@ -85,7 +85,7 @@ EXECUTE FUNCTION check_participant_in_hike_limit();
 
 ----------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION set_termination_date()
+CREATE OR REPLACE FUNCTION set_termination_date_on_trainer()
 RETURNS TRIGGER AS $$
 DECLARE
     old_type_name TEXT;
@@ -106,7 +106,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trg_set_termination_date
+CREATE TRIGGER set_termination_date_on_trainer_trigger
 AFTER UPDATE OF type_id ON Tourist
 FOR EACH ROW
-EXECUTE FUNCTION set_termination_date();
+EXECUTE FUNCTION set_termination_date_on_trainer();
