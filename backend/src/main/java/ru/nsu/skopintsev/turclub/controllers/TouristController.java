@@ -1,6 +1,7 @@
 package ru.nsu.skopintsev.turclub.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,9 @@ import java.util.List;
 public class TouristController {
     private final TouristService touristService;
 
+    @Value("${tourist.trainer.type}")
+    private String trainerName;
+
     @Autowired
     public TouristController(TouristService touristService) {
         this.touristService = touristService;
@@ -24,23 +28,25 @@ public class TouristController {
     public String listTourists(Model model) {
         List<Tourist> tourists = touristService.findAllTourists();
         model.addAttribute("listTourists", tourists);
+
         return "tourist/list-tourist";
     }
 
     @GetMapping("/details/{id}")
-    public String detailTourist(@PathVariable Integer id, Model model) {
+    public String detailsTourist(@PathVariable Integer id, Model model) {
         Tourist tourist = touristService.findTouristById(id);
-        Contacts contact = touristService.findContactsById(id);
+        if (tourist.getType().getName().equals(trainerName)) {
 
+        }
         model.addAttribute("tourist", tourist);
-        model.addAttribute("contact", contact);
+
         return "tourist/details-tourist";
     }
 
     @GetMapping("/new")
     public String showNewForm(Model model) {
         model.addAttribute("tourist", new Tourist());
-        model.addAttribute("contact", new Contacts());
+
         return "tourist/add-tourist";
     }
 
@@ -48,16 +54,17 @@ public class TouristController {
     public String saveTourist(@ModelAttribute("tourist") Tourist tourist,
                               @ModelAttribute("contact") Contacts contacts) {
         touristService.saveTourist(tourist, contacts);
+
         return "redirect:/tourist";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Integer id, Model model) {
         Tourist tourist = touristService.findTouristById(id);
-        Contacts contact = touristService.findContactsById(id);
-
+        List<Tourist.TouristType> touristTypes = touristService.findAllTouristTypes();
         model.addAttribute("tourist", tourist);
-        model.addAttribute("contact", contact);
+        model.addAttribute("touristTypes", touristTypes);
+
         return "tourist/edit-tourist";
     }
 
@@ -65,12 +72,14 @@ public class TouristController {
     public String updateTourist(@PathVariable Integer id, @ModelAttribute("tourist") Tourist tourist) {
         tourist.setId(id);
         touristService.updateTourist(tourist);
+
         return "redirect:/tourist";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteTourist(@PathVariable Integer id) {
         touristService.deleteTouristById(id);
+
         return "redirect:/tourist";
     }
 }

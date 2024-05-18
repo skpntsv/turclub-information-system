@@ -10,6 +10,17 @@ public class Tourist {
     private String gender;
     private Date birthday;
     private int category;
-    private Integer typeId;
-    private Integer contactId;
+    private TouristType type;
+    private Contacts contacts;
+
+    @Data
+    public static class TouristType {
+        private Integer id;
+        private String name;
+    }
+
+    public Tourist() {
+        this.type = new TouristType();
+        this.contacts = new Contacts();
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import ru.nsu.skopintsev.turclub.mapper.TouristRowMapper;
 import ru.nsu.skopintsev.turclub.models.Tourist;
 
 import java.util.List;
@@ -26,30 +27,45 @@ public class TouristDAO implements DAO<Tourist, Integer> {
     @Override
     public List<Tourist> findAll() {
         log.debug("Получение всех туристов");
-        return jdbcTemplate.query(
-                "SELECT * FROM tourist",
-                new BeanPropertyRowMapper<>(Tourist.class));
+        String sql = "SELECT t.id, t.full_name, t.gender, t.birthday, t.category, " +
+                "tt.id as type_id, tt.name as type_name, " +
+                "c.id as contact_id, c.email, c.main_phone, c.reserve_phone, c.emergency_phone " +
+                "FROM tourist t " +
+                "JOIN tourist_type tt ON t.type_id = tt.id " +
+                "JOIN contacts c ON t.contact_id = c.id";
+        return jdbcTemplate.query(sql, new TouristRowMapper());
     }
 
     @Override
     public Tourist findById(Integer id) {
-        return jdbcTemplate.queryForObject(
-                "SELECT * FROM tourist WHERE id = ?",
-                new BeanPropertyRowMapper<>(Tourist.class),
-                id);
+        String sql = "SELECT t.id, t.full_name, t.gender, t.birthday, t.category, " +
+                "tt.id as type_id, tt.name as type_name, " +
+                "c.id as contact_id, c.email, c.main_phone, c.reserve_phone, c.emergency_phone " +
+                "FROM tourist t " +
+                "JOIN tourist_type tt ON t.type_id = tt.id " +
+                "JOIN contacts c ON t.contact_id = c.id " +
+                "WHERE t.id = ?";
+        return jdbcTemplate.queryForObject(sql, new TouristRowMapper(), id);
     }
 
     @Override
     public int save(Tourist tourist) {
-        return jdbcTemplate.update(
-                "INSERT INTO tourist (full_name, gender, birthday, category, type_id, contact_id) VALUES (?, ?, ?, ?, ?, ?)",
+        String sql = "INSERT INTO tourist (full_name, gender, birthday, category, type_id, contact_id) VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
+        Integer generatedId = jdbcTemplate.queryForObject(
+                sql,
+                Integer.class,
                 tourist.getFullName(),
                 tourist.getGender(),
                 tourist.getBirthday(),
                 tourist.getCategory(),
-                tourist.getTypeId(),
-                tourist.getContactId()
+                tourist.getType().getId(),
+                tourist.getContacts().getId()
         );
+
+        if (generatedId == null) {
+            throw new IllegalStateException("Failed to retrieve generated id after insert");
+        }
+        return generatedId;
     }
 
     @Override
@@ -60,8 +76,8 @@ public class TouristDAO implements DAO<Tourist, Integer> {
                 tourist.getGender(),
                 tourist.getBirthday(),
                 tourist.getCategory(),
-                tourist.getTypeId(),
-                tourist.getContactId(),
+                tourist.getType().getId(),
+                tourist.getContacts().getId(),
                 tourist.getId()
         );
     }
@@ -78,5 +94,11 @@ public class TouristDAO implements DAO<Tourist, Integer> {
                 "SELECT id FROM tourist_type WHERE UPPER(name) = UPPER(?)",
                 Integer.class,
                 defaultTouristType);
+    }
+
+    public List<Tourist.TouristType> findAllTouristType() {
+        log.debug("Получение всех типов туристов");
+        String sql = "SELECT * FROM tourist_type";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Tourist.TouristType.class));
     }
 }

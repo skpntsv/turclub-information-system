@@ -9,7 +9,7 @@ import ru.nsu.skopintsev.turclub.models.Contacts;
 import java.util.List;
 
 @Repository
-public class ContactsDAO implements DAO<Contacts, Long> {
+public class ContactsDAO implements DAO<Contacts, Integer> {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -25,7 +25,7 @@ public class ContactsDAO implements DAO<Contacts, Long> {
     }
 
     @Override
-    public Contacts findById(Long id) {
+    public Contacts findById(Integer id) {
         return jdbcTemplate.queryForObject(
                 "SELECT * FROM contacts WHERE id = ?",
                 new BeanPropertyRowMapper<>(Contacts.class),
@@ -67,7 +67,7 @@ public class ContactsDAO implements DAO<Contacts, Long> {
     }
 
     @Override
-    public int deleteById(Long id) {
+    public int deleteById(Integer id) {
         return jdbcTemplate.update(
                 "DELETE FROM contacts WHERE id = ?",
                 id);

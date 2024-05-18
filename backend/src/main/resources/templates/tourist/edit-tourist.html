@@ -18,9 +18,16 @@
         <div class="form-group">
             <label for="gender">Пол:</label>
             <select class="form-control" id="gender" name="gender" th:value="${tourist.gender}">
-                <option value="">Выберите пол</option>
+                <option value="" disabled>Выберите пол</option>
                 <option value="male" th:selected="${tourist.gender} == 'male'">Мужской</option>
                 <option value="female" th:selected="${tourist.gender} == 'female'">Женский</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="typeId">Тип туриста:</label>
+            <select class="form-control" id="typeId" name="typeId" th:value="${tourist.type.id}">
+                <option value="" disabled="">Выберите тип туриста</option>
+                <option th:each="type : ${touristTypes}" th:value="${type.id}" th:text="${type.name}" th:selected="${tourist.type.id} == ${type.id}"></option>
             </select>
         </div>
         <div class="form-group">
@@ -29,19 +36,19 @@
         </div>
         <div class="form-group">
             <label for="mainPhone">Основной телефонный номер:</label>
-            <input type="text" class="form-control" id="mainPhone" name="mainPhone" th:value="${contact.mainPhone}" required pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
+            <input type="text" class="form-control" id="mainPhone" name="mainPhone" th:value="${tourist.contacts.mainPhone}" required pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
         </div>
         <div class="form-group">
             <label for="email">Электронная почта:</label>
-            <input type="email" class="form-control" id="email" name="email" th:value="${contact.email}" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="email@domen.ru"/>
+            <input type="email" class="form-control" id="email" name="email" th:value="${tourist.contacts.email}" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="email@domen.ru"/>
         </div>
         <div class="form-group">
             <label for="reservePhone">Второй номер телефона:</label>
-            <input type="text" class="form-control" id="reservePhone" name="reservePhone" th:field="${contact.reservePhone}" pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
+            <input type="text" class="form-control" id="reservePhone" name="reservePhone" th:field="${tourist.contacts.reservePhone}" pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
         </div>
         <div class="form-group">
             <label for="emergencyPhone">Экстренный номер телефона:</label>
-            <input type="text" class="form-control" id="emergencyPhone" name="emergencyPhone" th:field="${contact.emergencyPhone}" pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
+            <input type="text" class="form-control" id="emergencyPhone" name="emergencyPhone" th:field="${tourist.contacts.emergencyPhone}" pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
         </div>
         <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>

@@ -19,24 +19,28 @@
             <input type="text" class="form-control" id="gender" th:value="${tourist.gender != null ? (tourist.gender == 'male' ? 'Мужской' : 'Женский') : 'Не заполнено'}" readonly />
         </div>
         <div class="form-group">
+            <label for="typeId">Тип туриста:</label>
+            <input type="text" class="form-control" id="typeId" th:value="${tourist.type.name}" readonly />
+        </div>
+        <div class="form-group">
             <label for="birthday">Дата рождения:</label>
             <input type="text" class="form-control" id="birthday" th:value="${tourist.birthday != null ? #dates.format(tourist.birthday, 'dd.MM.yyyy') : 'Не заполнено'}" readonly />
         </div>
         <div class="form-group">
             <label for="mainPhone">Основной телефонный номер:</label>
-            <input type="text" class="form-control" id="mainPhone" th:value="${contact.mainPhone != null ? contact.mainPhone : 'Не заполнено'}" readonly />
+            <input type="text" class="form-control" id="mainPhone" th:value="${tourist.contacts.mainPhone != null ? tourist.contacts.mainPhone : 'Не заполнено'}" readonly />
         </div>
         <div class="form-group">
             <label for="email">Электронная почта:</label>
-            <input type="text" class="form-control" id="email" th:value="${contact.email != null ? contact.email : 'Не заполнено'}" readonly />
+            <input type="text" class="form-control" id="email" th:value="${tourist.contacts.email != null ? tourist.contacts.email : 'Не заполнено'}" readonly />
         </div>
         <div class="form-group">
             <label for="reservePhone">Второй номер телефона:</label>
-            <input type="text" class="form-control" id="reservePhone" th:value="${contact.reservePhone != null ? contact.reservePhone : 'Не заполнено'}" readonly />
+            <input type="text" class="form-control" id="reservePhone" th:value="${tourist.contacts.reservePhone != null ? tourist.contacts.reservePhone : 'Не заполнено'}" readonly />
         </div>
         <div class="form-group">
             <label for="emergencyPhone">Экстренный номер телефона:</label>
-            <input type="text" class="form-control" id="emergencyPhone" th:value="${contact.emergencyPhone != null ? contact.emergencyPhone : 'Не заполнено'}" readonly />
+            <input type="text" class="form-control" id="emergencyPhone" th:value="${tourist.contacts.emergencyPhone != null ? tourist.contacts.emergencyPhone : 'Не заполнено'}" readonly />
         </div>
         <div class="mt-4">
             <a th:href="@{'/tourist/edit/' + ${tourist.id}}" class="btn btn-warning">Редактировать</a>

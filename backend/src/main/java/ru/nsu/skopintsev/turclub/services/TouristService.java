@@ -64,20 +64,24 @@ public class TouristService {
         }
     }
 
-    public Contacts findContactsById(Integer id) {
+    public List<Tourist.TouristType> findAllTouristTypes() {
         try {
-            return contactsDAO.findById(id);
+            return touristDAO.findAllTouristType();
         } catch (Exception e) {
-            log.error("Error fetching tourist by ID: {}", id, e);
+            log.error("Error fetching all tourist types", e);
             throw e;
         }
     }
 
     public void saveTourist(Tourist tourist, Contacts contacts) {
         try {
-            tourist.setContactId(contactsDAO.save(contacts));
-            tourist.setTypeId(defaultTouristTypeId);
+            contacts.setId(contactsDAO.save(contacts));
+            tourist.setContacts(contacts);
+            Tourist.TouristType touristType = new Tourist.TouristType();
+            touristType.setId(defaultTouristTypeId);
+            tourist.setType(touristType);
             Integer touristId = touristDAO.save(tourist);
+
             log.info("Saved tourist with ID: {}", touristId);
         } catch (Exception e) {
             log.error("Error saving tourist", e);

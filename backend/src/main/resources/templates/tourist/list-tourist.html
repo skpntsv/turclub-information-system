@@ -19,24 +19,22 @@
             <th>ФИО</th>
             <th>Пол</th>
             <th>Дата рождения</th>
-            <th>Скилл</th>
-            <th>Тип</th>
-            <th>Contact ID</th>
+            <th>Тип туриста</th>
+            <th>Категория</th>
             <th>Действия</th>
         </tr>
         </thead>
         <tbody>
         <tr th:if="${listTourists.isEmpty()}">
-            <td colspan="8">Туристов не найдено</td>
+            <td colspan="7">Туристов не найдено</td>
         </tr>
         <tr th:each="tourist : ${listTourists}">
             <td th:text="${tourist.id}"></td>
             <td th:text="${tourist.fullName}"></td>
-            <td th:text="${tourist.gender}"></td>
+            <td th:text="${tourist.gender == 'male' ? 'Мужской' : 'Женский'}"></td>
             <td th:text="${#dates.format(tourist.birthday, 'dd-MM-yyyy')}"></td>
+            <td th:text="${tourist.type.name}"></td>
             <td th:text="${tourist.category}"></td>
-            <td th:text="${tourist.typeId}"></td>
-            <td th:text="${tourist.contactId}"></td>
             <td>
                 <a th:href="@{'/tourist/details/' + ${tourist.id}}" class="btn btn-info btn-sm">Подробнее</a>
                 <a th:href="@{'/tourist/edit/' + ${tourist.id}}" class="btn btn-warning btn-sm">Редактировать</a>
