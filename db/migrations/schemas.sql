@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS Tourist (
 CREATE TABLE IF NOT EXISTS SuperVisor (
 	id          SERIAL 			PRIMARY KEY,
 	full_name   VARCHAR(255) 	NOT NULL,
-	salary      MONEY			NOT NULL,
+	salary      NUMERIC(10, 2)	NOT NULL,
 	hire_date   DATE			NOT NULL,
 	birthday    DATE			CHECK (birthday <= CURRENT_DATE),
 	contact_id	INTEGER			NOT NULL REFERENCES Contacts(id)
@@ -48,12 +48,12 @@ CREATE TABLE IF NOT EXISTS Section (
 );
 
 CREATE TABLE IF NOT EXISTS Trainer (
-	id                	INTEGER 	PRIMARY KEY  REFERENCES Tourist(id),
-	salary            	MONEY		NOT NULL,
-	hire_date         	DATE		NOT NULL,
+	id                	INTEGER 		PRIMARY KEY  REFERENCES Tourist(id),
+	salary            	NUMERIC(10, 2)	NOT NULL,
+	hire_date         	DATE			NOT NULL,
 	termination_date	DATE,
-	specialization_id 	INTEGER   	NOT NULL REFERENCES Specialization(id),
-	section_id        	INTEGER 	NOT NULL REFERENCES Section(id)
+	specialization_id 	INTEGER   		NOT NULL REFERENCES Specialization(id),
+	section_id        	INTEGER 		NOT NULL REFERENCES Section(id)
 );
 
 CREATE TABLE IF NOT EXISTS Groups (
