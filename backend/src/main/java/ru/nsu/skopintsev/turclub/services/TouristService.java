@@ -64,12 +64,21 @@ public class TouristService {
         }
     }
 
+    public Contacts findContactsById(Integer id) {
+        try {
+            return contactsDAO.findById(id);
+        } catch (Exception e) {
+            log.error("Error fetching tourist by ID: {}", id, e);
+            throw e;
+        }
+    }
+
     public void saveTourist(Tourist tourist, Contacts contacts) {
         try {
             tourist.setContactId(contactsDAO.save(contacts));
             tourist.setTypeId(defaultTouristTypeId);
-            touristDAO.save(tourist);
-            log.info("Saved tourist: {}", tourist);
+            Integer touristId = touristDAO.save(tourist);
+            log.info("Saved tourist with ID: {}", touristId);
         } catch (Exception e) {
             log.error("Error saving tourist", e);
             throw e;

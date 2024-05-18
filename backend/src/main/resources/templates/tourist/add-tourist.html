@@ -2,50 +2,52 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Add New Tourist</title>
+    <title>Добавление</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Add New Tourist</h1>
-<form th:action="@{/tourist/save}" method="post">
-    <label for="fullName">ФИО:</label>
-    <input type="text" id="fullName" name="fullName" th:value="${tourist.fullName}" required/><br/>
-
-    <label for="gender">Пол:</label>
-    <select id="gender" name="gender" th:value="${tourist.gender}">
-        <option value="">Выберите пол</option>
-        <option value="male" th:selected="${tourist.gender} == 'male'">Мужской</option>
-        <option value="female" th:selected="${tourist.gender} == 'female'">Женский</option>
-    </select><br/>
-
-    <label for="birthday">Дата рождения:</label >
-    <input type="date" id="birthday" name="birthday" th:value="${tourist.birthday}" required/><br/>
-
-<!--    <label for="section">Секция:</label>-->
-<!--    <select id="section" name="section.id">-->
-<!--        <option th:each="section : ${sections}"-->
-<!--                th:value="${section.id}"-->
-<!--                th:text="${section.name}">Section name</option>-->
-<!--    </select><br/>-->
-
-<!--    <label for="category">Категория сложности:</label>-->
-<!--    <input type="number" id="category" name="category" th:value="*{category}" required/><br/>-->
-
-    <!-- Контактные данные -->
-    <label for="mainPhone">Основной телефонный номер:</label>
-    <input type="text" id="mainPhone" name="mainPhone" th:value="${contact.mainPhone}" required /><br/>
-
-    <label for="email">Электронная почта:</label>
-    <input type="email" id="email" name="email" th:value="${contact.email}" required/><br/>
-
-    <label for="reservePhone">Второй номер телефона:</label>
-    <input type="text" id="reservePhone" name="reservePhone" th:field="${contact.reservePhone}" /><br/>
-
-    <label for="emergencyPhone">Экстренный номер телефона:</label>
-    <input type="text" id="emergencyPhone" name="emergencyPhone" th:field="${contact.emergencyPhone}" /><br/>
-
-    <button type="submit">Добавить</button>
-</form>
-<a href="/tourist">Вернуться к списку туристов</a>
+<div class="container">
+    <h1 class="mt-4">Добавить нового туриста</h1>
+    <form th:action="@{/tourist/save}" method="post" class="mt-4">
+        <div class="form-group">
+            <label for="fullName">ФИО:</label>
+            <input type="text" class="form-control" id="fullName" name="fullName" th:value="${tourist.fullName}" required/>
+        </div>
+        <div class="form-group">
+            <label for="gender">Пол:</label>
+            <select class="form-control" id="gender" name="gender" th:value="${tourist.gender}">
+                <option value="">Выберите пол</option>
+                <option value="male" th:selected="${tourist.gender} == 'male'">Мужской</option>
+                <option value="female" th:selected="${tourist.gender} == 'female'">Женский</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="birthday">Дата рождения:</label>
+            <input type="date" class="form-control" id="birthday" name="birthday" th:value="${tourist.birthday}" required/>
+        </div>
+        <div class="form-group">
+            <label for="mainPhone">Основной телефонный номер:</label>
+            <input type="text" class="form-control" id="mainPhone" name="mainPhone" th:value="${contact.mainPhone}" required />
+        </div>
+        <div class="form-group">
+            <label for="email">Электронная почта:</label>
+            <input type="email" class="form-control" id="email" name="email" th:value="${contact.email}" required/>
+        </div>
+        <div class="form-group">
+            <label for="reservePhone">Второй номер телефона:</label>
+            <input type="text" class="form-control" id="reservePhone" name="reservePhone" th:field="${contact.reservePhone}" />
+        </div>
+        <div class="form-group">
+            <label for="emergencyPhone">Экстренный номер телефона:</label>
+            <input type="text" class="form-control" id="emergencyPhone" name="emergencyPhone" th:field="${contact.emergencyPhone}" />
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+    <a href="/tourist" class="btn btn-secondary mt-3">Вернуться к списку туристов</a>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

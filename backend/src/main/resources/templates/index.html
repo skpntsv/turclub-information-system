@@ -1,22 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>Информационная система туристического клуба</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div th:fragment="content">
-    <h1>Добро пожаловать!</h1>
-    <nav>
-        <ul>
-            <li><a href="/tourist" class="btn btn-primary">Управление туристами</a></li>
-            <li><a href="/hike" class="btn btn-primary">Управление походами</a></li>
-            <li><a href="/group" class="btn btn-primary">Управление группами</a></li>
-            <li><a href="/section" class="btn btn-primary">Управления секциями</a></li>
-            <li><a href="/training" class="btn btn-primary">Управление занятиями</a></li>
+<div class="container">
+    <h1 class="mt-4">Главное меню!</h1>
+    <nav class="mt-4">
+        <ul class="list-group">
+            <li class="list-group-item"><a href="/tourist" class="btn btn-primary btn-block">Управление туристами</a></li>
+            <li class="list-group-item"><a href="/hike" class="btn btn-primary btn-block">Управление походами</a></li>
+            <li class="list-group-item"><a href="/group" class="btn btn-primary btn-block">Управление группами</a></li>
+            <li class="list-group-item"><a href="/section" class="btn btn-primary btn-block">Управления секциями</a></li>
+            <li class="list-group-item"><a href="/training" class="btn btn-primary btn-block">Управление занятиями</a></li>
         </ul>
     </nav>
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

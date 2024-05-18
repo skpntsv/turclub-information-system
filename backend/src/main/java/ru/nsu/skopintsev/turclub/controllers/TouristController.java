@@ -24,7 +24,17 @@ public class TouristController {
     public String listTourists(Model model) {
         List<Tourist> tourists = touristService.findAllTourists();
         model.addAttribute("listTourists", tourists);
-        return "tourist/tourists";
+        return "tourist/list-tourist";
+    }
+
+    @GetMapping("/details/{id}")
+    public String detailTourist(@PathVariable Integer id, Model model) {
+        Tourist tourist = touristService.findTouristById(id);
+        Contacts contact = touristService.findContactsById(id);
+
+        model.addAttribute("tourist", tourist);
+        model.addAttribute("contact", contact);
+        return "tourist/details-tourist";
     }
 
     @GetMapping("/new")
@@ -44,7 +54,10 @@ public class TouristController {
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Integer id, Model model) {
         Tourist tourist = touristService.findTouristById(id);
+        Contacts contact = touristService.findContactsById(id);
+
         model.addAttribute("tourist", tourist);
+        model.addAttribute("contact", contact);
         return "tourist/edit-tourist";
     }
 
