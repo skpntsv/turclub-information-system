@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Редактирование</title>
+    <title>Редактирование туриста</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
@@ -11,6 +11,8 @@
     <h1 class="mt-4">Редактировать туриста</h1>
     <form th:action="@{/tourist/update}" method="post" class="mt-4">
         <input type="hidden" name="id" th:value="${tourist.id}" />
+
+        <!-- Общие поля для всех туристов -->
         <div class="form-group">
             <label for="fullName">ФИО:</label>
             <input type="text" class="form-control" id="fullName" name="fullName" th:value="${tourist.fullName}" required/>
@@ -21,13 +23,6 @@
                 <option value="" disabled>Выберите пол</option>
                 <option value="male" th:selected="${tourist.gender} == 'male'">Мужской</option>
                 <option value="female" th:selected="${tourist.gender} == 'female'">Женский</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="typeId">Тип туриста:</label>
-            <select class="form-control" id="typeId" name="typeId" th:value="${tourist.type.id}">
-                <option value="" disabled="">Выберите тип туриста</option>
-                <option th:each="type : ${touristTypes}" th:value="${type.id}" th:text="${type.name}" th:selected="${tourist.type.id} == ${type.id}"></option>
             </select>
         </div>
         <div class="form-group">
@@ -44,12 +39,45 @@
         </div>
         <div class="form-group">
             <label for="reservePhone">Второй номер телефона:</label>
-            <input type="text" class="form-control" id="reservePhone" name="reservePhone" th:field="${tourist.contacts.reservePhone}" pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
+            <input type="text" class="form-control" id="reservePhone" name="reservePhone" th:value="${tourist.contacts.reservePhone}" pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
         </div>
         <div class="form-group">
             <label for="emergencyPhone">Экстренный номер телефона:</label>
-            <input type="text" class="form-control" id="emergencyPhone" name="emergencyPhone" th:field="${tourist.contacts.emergencyPhone}" pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
+            <input type="text" class="form-control" id="emergencyPhone" name="emergencyPhone" th:value="${tourist.contacts.emergencyPhone}" pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
         </div>
+        <div class="form-group">
+            <label for="typeId">Тип туриста:</label>
+            <select class="form-control" id="typeId" name="typeId" th:value="${tourist.type.id}" onchange="showHideFields()">
+                <option value="" disabled>Выберите тип туриста</option>
+                <option th:each="type : ${touristTypes}" th:value="${type.id}" th:text="${type.name}" th:selected="${tourist.type.id} == ${type.id}"></option>
+            </select>
+        </div>
+
+        <!-- Поля для тренера -->
+        <fieldset id="trainerFields" class="border p-3 mt-4" style="display:none;">
+            <legend class="w-auto">Информация о тренере</legend>
+            <div class="form-group">
+                <label for="salary">Зарплата:</label>
+                <input type="text" class="form-control" id="salary" name="trainer.salary" th:value="${trainer.salary}" required/>
+            </div>
+            <div class="form-group">
+                <label for="hireDate">Дата приема на работу:</label>
+                <input type="date" class="form-control" id="hireDate" name="trainer.hireDate" th:value="${trainer.hireDate}" required/>
+            </div>
+            <div class="form-group">
+                <label for="terminationDate">Дата увольнения:</label>
+                <input type="date" class="form-control" id="terminationDate" name="trainer.terminationDate" th:value="${trainer.terminationDate}" />
+            </div>
+            <div class="form-group">
+                <label for="specialization">Специализация:</label>
+                <input type="text" class="form-control" id="specialization" name="trainer.specialization.name" th:value="${trainer.specialization.name}" required/>
+            </div>
+            <div class="form-group">
+                <label for="section">Секция:</label>
+                <input type="text" class="form-control" id="section" name="trainer.sectionId" th:value="${trainer.section.name}" required/>
+            </div>
+        </fieldset>
+
         <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>
     <a href="/tourist" class="btn btn-secondary mt-3">Вернуться к списку туристов</a>
@@ -57,5 +85,24 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function showHideFields() {
+        const typeId = document.getElementById('typeId');
+        const trainerFields = document.getElementById('trainerFields');
+        const selectedType = typeId.options[typeId.selectedIndex].text;
+
+        if (selectedType === 'Тренер') {
+            trainerFields.style.display = 'block';
+        } else {
+            trainerFields.style.display = 'none';
+        }
+    }
+
+    // Call the function on page load to set the initial state
+    document.addEventListener('DOMContentLoaded', (event) => {
+        showHideFields();
+    });
+</script>
 </body>
 </html>

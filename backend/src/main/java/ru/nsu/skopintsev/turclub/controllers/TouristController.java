@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.skopintsev.turclub.models.Contacts;
+import ru.nsu.skopintsev.turclub.models.Section;
 import ru.nsu.skopintsev.turclub.models.Tourist;
+import ru.nsu.skopintsev.turclub.models.Trainer;
 import ru.nsu.skopintsev.turclub.services.TouristService;
 
 import java.util.List;
@@ -35,10 +37,12 @@ public class TouristController {
     @GetMapping("/details/{id}")
     public String detailsTourist(@PathVariable Integer id, Model model) {
         Tourist tourist = touristService.findTouristById(id);
-        if (tourist.getType().getName().equals(trainerName)) {
-
-        }
         model.addAttribute("tourist", tourist);
+
+        if (tourist.getType().getName().equals(trainerName)) {
+            Trainer trainer = touristService.findTrainerById(tourist.getId());
+            model.addAttribute("trainer", trainer);
+        }
 
         return "tourist/details-tourist";
     }
@@ -64,6 +68,14 @@ public class TouristController {
         List<Tourist.TouristType> touristTypes = touristService.findAllTouristTypes();
         model.addAttribute("tourist", tourist);
         model.addAttribute("touristTypes", touristTypes);
+
+        // Подтипы
+        Trainer trainer = touristService.findTrainerById(tourist.getId());
+        List<Trainer.Specialization> specialization = touristService.findAllSpecializations();
+        List<Section> sections = touristService.findAllSections();
+        model.addAttribute("trainer", trainer);
+        model.addAttribute("specializationList", specialization);
+        model.addAttribute("sectionList", sections);
 
         return "tourist/edit-tourist";
     }

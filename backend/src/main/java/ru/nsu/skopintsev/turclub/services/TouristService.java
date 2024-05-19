@@ -7,9 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nsu.skopintsev.turclub.dao.ContactsDAO;
+import ru.nsu.skopintsev.turclub.dao.SectionDAO;
 import ru.nsu.skopintsev.turclub.dao.TouristDAO;
+import ru.nsu.skopintsev.turclub.dao.TrainerDAO;
 import ru.nsu.skopintsev.turclub.models.Contacts;
+import ru.nsu.skopintsev.turclub.models.Section;
 import ru.nsu.skopintsev.turclub.models.Tourist;
+import ru.nsu.skopintsev.turclub.models.Trainer;
 
 import java.util.List;
 
@@ -21,14 +25,18 @@ public class TouristService {
     private final ContactsDAO contactsDAO;
 
     private static Integer defaultTouristTypeId;
+    private final TrainerDAO trainerDAO;
+    private final SectionDAO sectionDAO;
 
     @Value("${error.default_tourist_type_not_found}")
     private String defaultTouristTypeNotFoundMessage;
 
     @Autowired
-    public TouristService(TouristDAO touristDAO, ContactsDAO contactsDAO) {
+    public TouristService(TouristDAO touristDAO, ContactsDAO contactsDAO, TrainerDAO trainerDAO, SectionDAO sectionDAO) {
         this.touristDAO = touristDAO;
         this.contactsDAO = contactsDAO;
+        this.trainerDAO = trainerDAO;
+        this.sectionDAO = sectionDAO;
     }
 
     @PostConstruct
@@ -55,6 +63,24 @@ public class TouristService {
         }
     }
 
+    public Trainer findTrainerById(Integer id) {
+        try {
+            return trainerDAO.findById(id);
+        } catch (Exception e) {
+            log.error("Error fetching tourist by ID: {}", id, e);
+            throw e;
+        }
+    }
+
+    public Tourist.TouristType findTouristTypeById(Integer id) {
+        try {
+            return touristDAO.findTouristTypeById(id);
+        } catch (Exception e) {
+            log.error("Error fetching tourist by ID: {}", id, e);
+            throw e;
+        }
+    }
+
     public Tourist findTouristById(Integer id) {
         try {
             return touristDAO.findById(id);
@@ -69,6 +95,24 @@ public class TouristService {
             return touristDAO.findAllTouristType();
         } catch (Exception e) {
             log.error("Error fetching all tourist types", e);
+            throw e;
+        }
+    }
+
+    public List<Trainer.Specialization> findAllSpecializations() {
+        try {
+            return trainerDAO.findAllSpecializations();
+        } catch (Exception e) {
+            log.error("Error fetching all specializations", e);
+            throw e;
+        }
+    }
+
+    public List<Section> findAllSections() {
+        try {
+            return sectionDAO.findAll();
+        } catch (Exception e) {
+            log.error("Error fetching all section", e);
             throw e;
         }
     }

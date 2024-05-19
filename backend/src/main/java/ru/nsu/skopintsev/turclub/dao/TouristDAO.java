@@ -99,6 +99,16 @@ public class TouristDAO implements DAO<Tourist, Integer> {
     public List<Tourist.TouristType> findAllTouristType() {
         log.debug("Получение всех типов туристов");
         String sql = "SELECT * FROM tourist_type";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Tourist.TouristType.class));
+        return jdbcTemplate.query(
+                sql,
+                new BeanPropertyRowMapper<>(Tourist.TouristType.class));
+    }
+
+    public Tourist.TouristType findTouristTypeById(Integer id) {
+        String sql = "SELECT id FROM tourist_type WHERE id = ?";
+        return jdbcTemplate.queryForObject(
+                sql,
+                new BeanPropertyRowMapper<>(Tourist.TouristType.class),
+                id);
     }
 }
