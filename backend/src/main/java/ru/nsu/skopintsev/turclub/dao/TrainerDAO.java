@@ -44,14 +44,14 @@ public class TrainerDAO implements DAO<Trainer, Integer> {
 
     @Override
     public int save(Trainer trainer) {
-        String sql = "INSERT INTO trainer (id, salary, hire_date, termination_date, specialization_id, section_id) VALUES (?, ?, ?, ?, ?) RETURNING id";
+        String sql = "INSERT INTO trainer (id, salary, hire_date, termination_date, specialization_id, section_id) VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
         Integer generatedId = jdbcTemplate.queryForObject(
                 sql,
                 Integer.class,
                 trainer.getId(),
                 trainer.getSalary(),
                 trainer.getHireDate(),
-                trainer.getTerminationDate(),
+                null,
                 trainer.getSpecialization().getId(),
                 trainer.getSection().getId()
         );

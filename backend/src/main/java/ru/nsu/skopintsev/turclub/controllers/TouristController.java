@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.skopintsev.turclub.models.Section;
 import ru.nsu.skopintsev.turclub.models.Tourist;
@@ -63,7 +64,6 @@ public class TouristController {
 
     @PostMapping("/save")
     public String saveTourist(@ModelAttribute("tourist") Tourist tourist) {
-        System.err.println("press button");
         touristService.saveTourist(tourist);
 
         return "redirect:/tourist";
@@ -95,11 +95,10 @@ public class TouristController {
     @PostMapping("/update/{id}")
     public String updateTourist(@PathVariable Integer id,
                                 @ModelAttribute("tourist") Tourist tourist,
-                                @ModelAttribute("trainer") Trainer trainer) {
-        // TODO не возвращается Тренер, надо починить
+                                @ModelAttribute("trainer") Trainer trainer,
+                                BindingResult bindingResult) {
         tourist.setId(id);
         touristService.updateTourist(tourist, trainer);
-
         return "redirect:/tourist";
     }
 

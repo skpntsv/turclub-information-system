@@ -152,6 +152,7 @@ public class TouristService {
     }
 
     public void updateTourist(Tourist tourist, Trainer trainer) {
+        int touristId;
         try {
             List<Tourist.TouristType> touristTypes = touristDAO.findAllTouristType();
             Optional<Integer> trainerTypeId = touristTypes.stream()
@@ -163,17 +164,20 @@ public class TouristService {
                 throw new IllegalStateException(trainerTouristTypeNotFoundMessage);
             }
             if (tourist.getType().getId().equals(trainerTypeId.get())) {
+                trainer.setId(tourist.getId());
                 if (getTrainer(tourist.getId()).isPresent()) {
                     trainerDAO.update(trainer);
                 } else {
                     trainerDAO.save(trainer);
                 }
-                touristDAO.update(tourist);
-                log.info("Updated tourist and subtype Trainer with ID: {}", tourist.getId());
-            } else {
-                log.info("Updated tourist with ID: {}", tourist.getId());
-                touristDAO.update(tourist);
+
+                touristId = touristDAO.update(tourist);
                 contactsDAO.update(tourist.getContacts());
+                log.info("Updated tourist and subtype Trainer with ID: {}", touristId);
+            } else {
+                touristId = touristDAO.update(tourist);
+                contactsDAO.update(tourist.getContacts());
+                log.info("Updated tourist with ID: {}", touristId);
             }
         } catch (Exception e) {
             log.error("Error updating tourist", e);
