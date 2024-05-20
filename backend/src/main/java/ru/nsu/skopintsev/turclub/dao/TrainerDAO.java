@@ -2,6 +2,7 @@ package ru.nsu.skopintsev.turclub.dao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -31,7 +32,7 @@ public class TrainerDAO implements DAO<Trainer, Integer> {
     }
 
     @Override
-    public Trainer findById(Integer id) {
+    public Trainer findById(Integer id) throws DataAccessException {
         String sql = "SELECT t.id, t.salary, t.hire_date, t.section_id, t.specialization_id as specialization_id, " +
                 "sp.name as specialization_name, t.termination_date, s.id as section_id, s.name as section_name " +
                 "FROM trainer t " +
@@ -70,7 +71,8 @@ public class TrainerDAO implements DAO<Trainer, Integer> {
                 trainer.getHireDate(),
                 trainer.getTerminationDate(),
                 trainer.getSpecialization().getId(),
-                trainer.getSection().getId()
+                trainer.getSection().getId(),
+                trainer.getId()
         );
     }
 

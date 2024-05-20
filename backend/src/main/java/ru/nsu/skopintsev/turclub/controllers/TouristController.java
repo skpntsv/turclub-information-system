@@ -1,18 +1,20 @@
 package ru.nsu.skopintsev.turclub.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.nsu.skopintsev.turclub.models.Contacts;
 import ru.nsu.skopintsev.turclub.models.Section;
 import ru.nsu.skopintsev.turclub.models.Tourist;
 import ru.nsu.skopintsev.turclub.models.Trainer;
 import ru.nsu.skopintsev.turclub.services.TouristService;
 
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequestMapping("/tourist")
 public class TouristController {
@@ -40,8 +42,13 @@ public class TouristController {
         model.addAttribute("tourist", tourist);
 
         if (tourist.getType().getName().equals(trainerName)) {
-            Trainer trainer = touristService.findTrainerById(tourist.getId());
-            model.addAttribute("trainer", trainer);
+            Optional<Trainer> trainer = touristService.findTrainerById(tourist.getId());
+            if (trainer.isPresent()) {
+                model.addAttribute("trainer", trainer.get());
+            } else {
+                model.addAttribute("error", "Турист имеет тип 'Тренер', но отсутствует запись в таблице Trainer.");
+                model.addAttribute("suggestFix", true);
+            }
         }
 
         return "tourist/details-tourist";
@@ -55,9 +62,9 @@ public class TouristController {
     }
 
     @PostMapping("/save")
-    public String saveTourist(@ModelAttribute("tourist") Tourist tourist,
-                              @ModelAttribute("contact") Contacts contacts) {
-        touristService.saveTourist(tourist, contacts);
+    public String saveTourist(@ModelAttribute("tourist") Tourist tourist) {
+        System.err.println("press button");
+        touristService.saveTourist(tourist);
 
         return "redirect:/tourist";
     }
@@ -70,10 +77,15 @@ public class TouristController {
         model.addAttribute("touristTypes", touristTypes);
 
         // Подтипы
-        Trainer trainer = touristService.findTrainerById(tourist.getId());
+        Optional<Trainer> trainer = touristService.findTrainerById(tourist.getId());
+        if (trainer.isPresent()) {
+            model.addAttribute("trainer", trainer.get());
+        } else {
+            model.addAttribute("trainer", new Trainer());
+        }
+
         List<Trainer.Specialization> specialization = touristService.findAllSpecializations();
         List<Section> sections = touristService.findAllSections();
-        model.addAttribute("trainer", trainer);
         model.addAttribute("specializationList", specialization);
         model.addAttribute("sectionList", sections);
 
@@ -81,9 +93,12 @@ public class TouristController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateTourist(@PathVariable Integer id, @ModelAttribute("tourist") Tourist tourist) {
+    public String updateTourist(@PathVariable Integer id,
+                                @ModelAttribute("tourist") Tourist tourist,
+                                @ModelAttribute("trainer") Trainer trainer) {
+        // TODO не возвращается Тренер, надо починить
         tourist.setId(id);
-        touristService.updateTourist(tourist);
+        touristService.updateTourist(tourist, trainer);
 
         return "redirect:/tourist";
     }

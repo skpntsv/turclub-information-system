@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nsu.skopintsev.turclub.dao.ContactsDAO;
@@ -16,6 +17,7 @@ import ru.nsu.skopintsev.turclub.models.Tourist;
 import ru.nsu.skopintsev.turclub.models.Trainer;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -30,6 +32,12 @@ public class TouristService {
 
     @Value("${error.default_tourist_type_not_found}")
     private String defaultTouristTypeNotFoundMessage;
+
+    @Value("${error.trainer_tourist_type_not_fount}")
+    private String trainerTouristTypeNotFoundMessage;
+
+    @Value("${tourist.trainer.type}")
+    private String trainerName;
 
     @Autowired
     public TouristService(TouristDAO touristDAO, ContactsDAO contactsDAO, TrainerDAO trainerDAO, SectionDAO sectionDAO) {
@@ -63,9 +71,14 @@ public class TouristService {
         }
     }
 
-    public Trainer findTrainerById(Integer id) {
+    public Optional<Trainer> findTrainerById(Integer id) {
         try {
-            return trainerDAO.findById(id);
+            Trainer trainer = trainerDAO.findById(id);
+            return trainer != null ? Optional.of(trainer) : Optional.empty();
+        } catch (EmptyResultDataAccessException e) {
+            log.info("No trainer found with ID: {}", id);
+
+            return Optional.empty();
         } catch (Exception e) {
             log.error("Error fetching tourist by ID: {}", id, e);
             throw e;
@@ -117,13 +130,18 @@ public class TouristService {
         }
     }
 
-    public void saveTourist(Tourist tourist, Contacts contacts) {
+    public void saveTourist(Tourist tourist) {
         try {
-            contacts.setId(contactsDAO.save(contacts));
+            Contacts contacts = tourist.getContacts();
+            contacts.setId(contactsDAO.save(tourist.getContacts()));
             tourist.setContacts(contacts);
+
+            // Установка типа туриста по умолчанию (из staff.properties)
             Tourist.TouristType touristType = new Tourist.TouristType();
             touristType.setId(defaultTouristTypeId);
             tourist.setType(touristType);
+
+            // Сохранение туриста со всеми параметрами
             Integer touristId = touristDAO.save(tourist);
 
             log.info("Saved tourist with ID: {}", touristId);
@@ -133,13 +151,42 @@ public class TouristService {
         }
     }
 
-    public void updateTourist(Tourist tourist) {
+    public void updateTourist(Tourist tourist, Trainer trainer) {
         try {
-            touristDAO.update(tourist);
-            log.info("Updated tourist: {}", tourist);
+            List<Tourist.TouristType> touristTypes = touristDAO.findAllTouristType();
+            Optional<Integer> trainerTypeId = touristTypes.stream()
+                    .filter(type -> trainerName.equals(type.getName()))
+                    .map(Tourist.TouristType::getId)
+                    .findFirst();
+            if (trainerTypeId.isEmpty()) {
+                log.error("Type '{}' not exist", trainerName);
+                throw new IllegalStateException(trainerTouristTypeNotFoundMessage);
+            }
+            if (tourist.getType().getId().equals(trainerTypeId.get())) {
+                if (getTrainer(tourist.getId()).isPresent()) {
+                    trainerDAO.update(trainer);
+                } else {
+                    trainerDAO.save(trainer);
+                }
+                touristDAO.update(tourist);
+                log.info("Updated tourist and subtype Trainer with ID: {}", tourist.getId());
+            } else {
+                log.info("Updated tourist with ID: {}", tourist.getId());
+                touristDAO.update(tourist);
+                contactsDAO.update(tourist.getContacts());
+            }
         } catch (Exception e) {
             log.error("Error updating tourist", e);
             throw e;
+        }
+    }
+
+    private Optional<Trainer> getTrainer(Integer id) {
+        try {
+            Trainer trainer = trainerDAO.findById(id);
+            return trainer != null ? Optional.of(trainer) : Optional.empty();
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
         }
     }
 

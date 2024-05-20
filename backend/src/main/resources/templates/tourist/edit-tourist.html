@@ -9,77 +9,107 @@
 <body>
 <div class="container">
     <h1 class="mt-4">Редактировать туриста</h1>
-    <form th:action="@{/tourist/update}" method="post" class="mt-4">
-        <input type="hidden" name="id" th:value="${tourist.id}" />
 
-        <!-- Общие поля для всех туристов -->
-        <div class="form-group">
-            <label for="fullName">ФИО:</label>
-            <input type="text" class="form-control" id="fullName" name="fullName" th:value="${tourist.fullName}" required/>
+    <!-- Проверка наличия ошибки -->
+    <div th:if="${error}" class="alert alert-danger">
+        <p th:text="${error}"></p>
+        <div th:if="${suggestFix}">
+            <a th:href="@{'/tourist/edit/' + ${tourist.id}}" class="btn btn-primary">Редактировать туриста</a>
         </div>
-        <div class="form-group">
-            <label for="gender">Пол:</label>
-            <select class="form-control" id="gender" name="gender" th:value="${tourist.gender}">
-                <option value="" disabled>Выберите пол</option>
-                <option value="male" th:selected="${tourist.gender} == 'male'">Мужской</option>
-                <option value="female" th:selected="${tourist.gender} == 'female'">Женский</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="birthday">Дата рождения:</label>
-            <input type="date" class="form-control" id="birthday" name="birthday" th:value="${tourist.birthday}" required/>
-        </div>
-        <div class="form-group">
-            <label for="mainPhone">Основной телефонный номер:</label>
-            <input type="text" class="form-control" id="mainPhone" name="mainPhone" th:value="${tourist.contacts.mainPhone}" required pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
-        </div>
-        <div class="form-group">
-            <label for="email">Электронная почта:</label>
-            <input type="email" class="form-control" id="email" name="email" th:value="${tourist.contacts.email}" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="email@domen.ru"/>
-        </div>
-        <div class="form-group">
-            <label for="reservePhone">Второй номер телефона:</label>
-            <input type="text" class="form-control" id="reservePhone" name="reservePhone" th:value="${tourist.contacts.reservePhone}" pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
-        </div>
-        <div class="form-group">
-            <label for="emergencyPhone">Экстренный номер телефона:</label>
-            <input type="text" class="form-control" id="emergencyPhone" name="emergencyPhone" th:value="${tourist.contacts.emergencyPhone}" pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
-        </div>
-        <div class="form-group">
-            <label for="typeId">Тип туриста:</label>
-            <select class="form-control" id="typeId" name="typeId" th:value="${tourist.type.id}" onchange="showHideFields()">
-                <option value="" disabled>Выберите тип туриста</option>
-                <option th:each="type : ${touristTypes}" th:value="${type.id}" th:text="${type.name}" th:selected="${tourist.type.id} == ${type.id}"></option>
-            </select>
-        </div>
+    </div>
 
-        <!-- Поля для тренера -->
-        <fieldset id="trainerFields" class="border p-3 mt-4" style="display:none;">
-            <legend class="w-auto">Информация о тренере</legend>
-            <div class="form-group">
-                <label for="salary">Зарплата:</label>
-                <input type="text" class="form-control" id="salary" name="trainer.salary" th:value="${trainer.salary}" required/>
-            </div>
-            <div class="form-group">
-                <label for="hireDate">Дата приема на работу:</label>
-                <input type="date" class="form-control" id="hireDate" name="trainer.hireDate" th:value="${trainer.hireDate}" required/>
-            </div>
-            <div class="form-group">
-                <label for="terminationDate">Дата увольнения:</label>
-                <input type="date" class="form-control" id="terminationDate" name="trainer.terminationDate" th:value="${trainer.terminationDate}" />
-            </div>
-            <div class="form-group">
-                <label for="specialization">Специализация:</label>
-                <input type="text" class="form-control" id="specialization" name="trainer.specialization.name" th:value="${trainer.specialization.name}" required/>
-            </div>
-            <div class="form-group">
-                <label for="section">Секция:</label>
-                <input type="text" class="form-control" id="section" name="trainer.sectionId" th:value="${trainer.section.name}" required/>
-            </div>
-        </fieldset>
+    <div th:if="${error == null}">
+        <form th:action="@{'/tourist/update/' + ${tourist.id}}" method="post" class="mt-4">
+            <input type="hidden" name="id" th:value="${tourist.id}" />
+            <input type="hidden" name="contacts.id" th:value="${tourist.contacts.id}" />
 
-        <button type="submit" class="btn btn-primary">Сохранить</button>
-    </form>
+            <!-- Общие поля для всех туристов -->
+            <div class="form-group">
+                <label for="fullName">ФИО:</label>
+                <input type="text" class="form-control" id="fullName" name="fullName" th:value="${tourist.fullName}" required/>
+            </div>
+            <div class="form-group">
+                <label for="gender">Пол:</label>
+                <select class="form-control" id="gender" name="gender" th:value="${tourist.gender}">
+                    <option value="" disabled>Выберите пол</option>
+                    <option value="male" th:selected="${tourist.gender} == 'male'">Мужской</option>
+                    <option value="female" th:selected="${tourist.gender} == 'female'">Женский</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="birthday">Дата рождения:</label>
+                <input type="date" class="form-control" id="birthday" name="birthday" th:value="${tourist.birthday}" required/>
+            </div>
+            <div class="form-group">
+                <label for="mainPhone">Основной телефонный номер:</label>
+                <input type="text" class="form-control" id="mainPhone" name="contacts.mainPhone" th:value="${tourist.contacts.mainPhone}" required pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
+            </div>
+            <div class="form-group">
+                <label for="email">Электронная почта:</label>
+                <input type="email" class="form-control" id="email" name="contacts.email" th:value="${tourist.contacts.email}" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="email@domen.ru"/>
+            </div>
+            <div class="form-group">
+                <label for="reservePhone">Второй номер телефона:</label>
+                <input type="text" class="form-control" id="reservePhone" name="contacts.reservePhone" th:value="${tourist.contacts.reservePhone}" pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
+            </div>
+            <div class="form-group">
+                <label for="emergencyPhone">Экстренный номер телефона:</label>
+                <input type="text" class="form-control" id="emergencyPhone" name="contacts.emergencyPhone" th:value="${tourist.contacts.emergencyPhone}" pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" title="+7-000-000-00-00"/>
+            </div>
+            <div class="form-group">
+                <label for="type.id">Тип туриста:</label>
+                <select class="form-control" id="type.id" name="type.id" th:value="${tourist.type.id}" onchange="showHideFields()">
+                    <option value="" disabled>Выберите тип туриста</option>
+                    <option th:each="type : ${touristTypes}" th:value="${type.id}" th:text="${type.name}" th:selected="${tourist.type.id} == ${type.id}"></option>
+                </select>
+            </div>
+
+            <!-- Поля для тренера -->
+            <fieldset id="trainerFields" class="border p-3 mt-4" style="display:none;">
+                <legend class="w-auto">Информация о тренере</legend>
+
+                <input type="hidden" name="trainer.id" th:value="${trainer.id}" />
+
+                <div class="form-group">
+                    <label for="salary">Зарплата:</label>
+                    <input type="text" class="form-control" id="salary" name="trainer.salary" th:value="${trainer.salary}" required/>
+                </div>
+                <div class="form-group">
+                    <label for="hireDate">Дата приема на работу:</label>
+                    <input type="date" class="form-control" id="hireDate" name="trainer.hireDate" th:value="${trainer.hireDate}" required/>
+                </div>
+                <div class="form-group">
+                    <label for="terminationDate">Дата увольнения:</label>
+                    <input type="date" class="form-control" id="terminationDate" name="trainer.terminationDate" th:value="${trainer.terminationDate}" />
+                </div>
+                <!-- Выпадающий список для специализации -->
+                <div class="form-group">
+                    <label for="specialization">Специализация:</label>
+                    <select class="form-control" id="specialization" name="trainer.specialization.id" required>
+                        <option th:each="specialization : ${specializationList}"
+                                th:value="${specialization.id}"
+                                th:text="${specialization.name}"
+                                th:selected="${specialization.id} == ${trainer.specialization.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Выпадающий список для секции -->
+                <div class="form-group">
+                    <label for="section">Секция:</label>
+                    <select class="form-control" id="section" name="trainer.section.id" required>
+                        <option th:each="section : ${sectionList}"
+                                th:value="${section.id}"
+                                th:text="${section.name}"
+                                th:selected="${section.id} == ${trainer.section.id}">
+                        </option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
     <a href="/tourist" class="btn btn-secondary mt-3">Вернуться к списку туристов</a>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -88,7 +118,7 @@
 
 <script>
     function showHideFields() {
-        const typeId = document.getElementById('typeId');
+        const typeId = document.getElementById('type.id');
         const trainerFields = document.getElementById('trainerFields');
         const selectedType = typeId.options[typeId.selectedIndex].text;
 

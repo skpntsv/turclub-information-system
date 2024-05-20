@@ -9,75 +9,86 @@
 <body>
 <div class="container">
     <h1 class="mt-4">Информация о туристе</h1>
-    <div class="mt-4">
-        <div class="form-group">
-            <label for="fullName">ФИО:</label>
-            <input type="text" class="form-control" id="fullName" th:value="${tourist.fullName != null ? tourist.fullName : 'Не заполнено'}" readonly />
-        </div>
 
-        <div class="form-group">
-            <label for="gender">Пол:</label>
-            <input type="text" class="form-control" id="gender" th:value="${tourist.gender != null ? (tourist.gender == 'male' ? 'Мужской' : 'Женский') : 'Не заполнено'}" readonly />
+    <!-- Проверка наличия ошибки -->
+    <div th:if="${error}" class="alert alert-danger">
+        <p th:text="${error}"></p>
+        <div th:if="${suggestFix}">
+            <a th:href="@{'/tourist/edit/' + ${tourist.id}}" class="btn btn-primary">Редактировать туриста</a>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label for="birthday">Дата рождения:</label>
-            <input type="text" class="form-control" id="birthday" th:value="${tourist.birthday != null ? #dates.format(tourist.birthday, 'dd.MM.yyyy') : 'Не заполнено'}" readonly />
-        </div>
-
-        <div class="form-group">
-            <label for="mainPhone">Основной телефонный номер:</label>
-            <input type="text" class="form-control" id="mainPhone" th:value="${tourist.contacts.mainPhone != null ? tourist.contacts.mainPhone : 'Не заполнено'}" readonly />
-        </div>
-
-        <div class="form-group">
-            <label for="email">Электронная почта:</label>
-            <input type="text" class="form-control" id="email" th:value="${tourist.contacts.email != null ? tourist.contacts.email : 'Не заполнено'}" readonly />
-        </div>
-
-        <div class="form-group">
-            <label for="reservePhone">Второй номер телефона:</label>
-            <input type="text" class="form-control" id="reservePhone" th:value="${tourist.contacts.reservePhone != null ? tourist.contacts.reservePhone : 'Не заполнено'}" readonly />
-        </div>
-
-        <div class="form-group">
-            <label for="emergencyPhone">Экстренный номер телефона:</label>
-            <input type="text" class="form-control" id="emergencyPhone" th:value="${tourist.contacts.emergencyPhone != null ? tourist.contacts.emergencyPhone : 'Не заполнено'}" readonly />
-        </div>
-        <div class="form-group">
-            <label for="typeId">Тип туриста:</label>
-            <input type="text" class="form-control" id="typeId" th:value="${tourist.type.name}" readonly />
-        </div>
-
-        <!-- Блок для дополнительных сведений о тренере -->
-        <fieldset th:if="${tourist.type.name == 'Тренер'}" class="border p-3 mt-4">
-            <legend class="w-auto">Информация о тренере</legend>
-            <div class="form-group">
-                <label for="salary">Зарплата:</label>
-                <input type="text" class="form-control" id="salary" th:value="${trainer.salary != null ? trainer.salary + ' рублей' : 'Не заполнено'}" readonly />
-            </div>
-            <div class="form-group">
-                <label for="hireDate">Дата приема на работу:</label>
-                <input type="text" class="form-control" id="hireDate" th:value="${trainer.hireDate != null ? #dates.format(trainer.hireDate, 'dd.MM.yyyy') : 'Не заполнено'}" readonly />
-            </div>
-<!--            <div class="form-group">-->
-<!--                <label for="terminationDate">Дата увольнения:</label>-->
-<!--                <input type="text" class="form-control" id="terminationDate" th:value="${trainer.terminationDate != null ? #dates.format(trainer.terminationDate, 'dd.MM.yyyy') : 'Не заполнено'}" readonly />-->
-<!--            </div>-->
-            <div class="form-group">
-                <label for="specialization">Специализация:</label>
-                <input type="text" class="form-control" id="specialization" th:value="${trainer.specialization.name}" readonly />
-            </div>
-            <div class="form-group">
-                <label for="section">Секция:</label>
-                <input type="text" class="form-control" id="section" th:value="${trainer.section.name}" readonly />
-            </div>
-        </fieldset>
-        <!-- Конец блока для дополнительных сведений о тренере -->
-
+    <div th:if="${error == null}">
         <div class="mt-4">
-            <a th:href="@{'/tourist/edit/' + ${tourist.id}}" class="btn btn-warning">Редактировать</a>
-            <a th:href="@{'/tourist/delete/' + ${tourist.id}}" class="btn btn-danger">Удалить</a>
+            <div class="form-group">
+                <label for="fullName">ФИО:</label>
+                <input type="text" class="form-control" id="fullName" th:value="${tourist.fullName != null ? tourist.fullName : 'Не заполнено'}" readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Пол:</label>
+                <input type="text" class="form-control" id="gender" th:value="${tourist.gender != null ? (tourist.gender == 'male' ? 'Мужской' : 'Женский') : 'Не заполнено'}" readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="birthday">Дата рождения:</label>
+                <input type="text" class="form-control" id="birthday" th:value="${tourist.birthday != null ? #dates.format(tourist.birthday, 'dd.MM.yyyy') : 'Не заполнено'}" readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="mainPhone">Основной телефонный номер:</label>
+                <input type="text" class="form-control" id="mainPhone" th:value="${tourist.contacts.mainPhone != null ? tourist.contacts.mainPhone : 'Не заполнено'}" readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="email">Электронная почта:</label>
+                <input type="text" class="form-control" id="email" th:value="${tourist.contacts.email != null ? tourist.contacts.email : 'Не заполнено'}" readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="reservePhone">Второй номер телефона:</label>
+                <input type="text" class="form-control" id="reservePhone" th:value="${tourist.contacts.reservePhone != null ? tourist.contacts.reservePhone : 'Не заполнено'}" readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="emergencyPhone">Экстренный номер телефона:</label>
+                <input type="text" class="form-control" id="emergencyPhone" th:value="${tourist.contacts.emergencyPhone != null ? tourist.contacts.emergencyPhone : 'Не заполнено'}" readonly />
+            </div>
+            <div class="form-group">
+                <label for="typeId">Тип туриста:</label>
+                <input type="text" class="form-control" id="typeId" th:value="${tourist.type.name}" readonly />
+            </div>
+
+            <!-- Блок для дополнительных сведений о тренере -->
+            <fieldset th:if="${tourist.type.name == 'Тренер'}" class="border p-3 mt-4">
+                <legend class="w-auto">Информация о тренере</legend>
+                <div class="form-group">
+                    <label for="salary">Зарплата:</label>
+                    <input type="text" class="form-control" id="salary" th:value="${trainer.salary != null ? trainer.salary + ' рублей' : 'Не заполнено'}" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="hireDate">Дата приема на работу:</label>
+                    <input type="text" class="form-control" id="hireDate" th:value="${trainer.hireDate != null ? #dates.format(trainer.hireDate, 'dd.MM.yyyy') : 'Не заполнено'}" readonly />
+                </div>
+    <!--            <div class="form-group">-->
+    <!--                <label for="terminationDate">Дата увольнения:</label>-->
+    <!--                <input type="text" class="form-control" id="terminationDate" th:value="${trainer.terminationDate != null ? #dates.format(trainer.terminationDate, 'dd.MM.yyyy') : 'Не заполнено'}" readonly />-->
+    <!--            </div>-->
+                <div class="form-group">
+                    <label for="specialization">Специализация:</label>
+                    <input type="text" class="form-control" id="specialization" th:value="${trainer.specialization.name}" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="section">Секция:</label>
+                    <input type="text" class="form-control" id="section" th:value="${trainer.section.name}" readonly />
+                </div>
+            </fieldset>
+            <!-- Конец блока для дополнительных сведений о тренере -->
+
+            <div class="mt-4">
+                <a th:href="@{'/tourist/edit/' + ${tourist.id}}" class="btn btn-warning">Редактировать</a>
+                <a th:href="@{'/tourist/delete/' + ${tourist.id}}" class="btn btn-danger">Удалить</a>
+            </div>
         </div>
     </div>
     <a href="/tourist" class="btn btn-secondary mt-3">Вернуться к списку туристов</a>
