@@ -171,13 +171,13 @@ public class TouristService {
                     trainerDAO.save(trainer);
                 }
 
-                touristId = touristDAO.update(tourist);
+                touristDAO.update(tourist);
                 contactsDAO.update(tourist.getContacts());
-                log.info("Updated tourist and subtype Trainer with ID: {}", touristId);
+                log.info("Updated tourist and subtype Trainer with ID: {}", tourist.getId());
             } else {
-                touristId = touristDAO.update(tourist);
+                touristDAO.update(tourist);
                 contactsDAO.update(tourist.getContacts());
-                log.info("Updated tourist with ID: {}", touristId);
+                log.info("Updated tourist with ID: {}", tourist.getId());
             }
         } catch (Exception e) {
             log.error("Error updating tourist", e);
