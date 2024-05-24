@@ -1,7 +1,7 @@
 SELECT
     t.id as ID,
     t.full_name AS ФИО,
-    tt.name AS Тип_туриста,
+    tt.name AS "Тип туриста",
     CASE
         WHEN t.gender = 'female' THEN 'Женский'
         WHEN t.gender = 'male' THEN 'Мужской'
@@ -9,12 +9,12 @@ SELECT
     END AS Пол,
     t.birthday AS "Дата рождения",
     t.category AS Категория,
-    c.email AS Email,
-    c.main_phone AS Основной_телефон,
+    c.email AS Почта,
+    c.main_phone AS "Основной телефон",
     c.reserve_phone AS "Резервный телефон",
     c.emergency_phone AS "Экстренный телефон",
-    g.name AS "Название группы",
-    s.name AS "Название секции"
+    g.name AS "Группа",
+    s.name AS "Секция"
 FROM
     Tourist t
     JOIN Tourist_Groups tg ON t.id = tg.tourist_id
