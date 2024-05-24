@@ -2,12 +2,12 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Фильтры и результаты</title>
+    <title>Запросы</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
-    <h1>Фильтры и результаты</h1>
+    <h2>Получить список и общее число туpистов, занимающихся в клубе, в указанной секции, гpуппе, по половому пpизнаку, году pождения, возpасту.</h2>
     <div class="row">
         <div class="col-md-3">
             <h3>Количество туристов</h3>
@@ -15,18 +15,38 @@
         </div>
         <div class="col-md-9">
             <form action="/query/1" method="post">
+                <!-- Выпадающий список для секции -->
                 <div class="form-group">
-                    <label for="sectionId">Секция</label>
-                    <input type="text" class="form-control" id="sectionId" name="sectionId">
+                    <label for="section">Секция:</label>
+                    <select class="form-control" id="section" name="sectionId">
+                        <option value="">Любая</option>
+                        <option th:if="${sectionList == null}" value="" disabled>Секций не найдено</option>
+                        <option th:each="section : ${sectionList}"
+                                th:value="${section.id}"
+                                th:text="${section.name}"
+                                th:selected="${section.id} == ${sectionId}"
+                                th:unless="${sectionList == null}">
+                        </option>
+                    </select>
                 </div>
+
                 <div class="form-group">
-                    <label for="groupId">Группа</label>
-                    <input type="text" class="form-control" id="groupId" name="groupId">
+                    <label for="group">Группа:</label>
+                    <select class="form-control" id="group" name="groupId">
+                        <option value="">Любая</option>
+                        <option th:if="${groupList == null}" value="" disabled>Групп не найдено</option>
+                        <option th:each="group : ${groupList}"
+                                th:value="${group.id}"
+                                th:text="${group.id} + ' - ' + ${group.name}"
+                                th:selected="${group.id} == ${groupId}">
+                        </option>
+                    </select>
                 </div>
+
                 <div class="form-group">
                     <label for="gender">Пол</label>
                     <select class="form-control" id="gender" name="gender">
-                        <option value="">Любой</option>
+                        <option value=>Любой</option>
                         <option value="male">Мужской</option>
                         <option value="female">Женский</option>
                     </select>
@@ -53,8 +73,8 @@
                 <h3>Результаты</h3>
                 <table class="table table-striped">
                     <thead>
-                    <tr th:each="header : ${headers}">
-                        <th th:text="${header}"></th>
+                    <tr>
+                        <th th:each="header : ${headers}">[[${header}]]</th>
                     </tr>
                     </thead>
                     <tbody>
