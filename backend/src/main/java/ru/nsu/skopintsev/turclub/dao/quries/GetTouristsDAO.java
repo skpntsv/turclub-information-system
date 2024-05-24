@@ -53,7 +53,9 @@ public class GetTouristsDAO {
                 getMapSqlParameters(sectionId, groupId, gender, birthdayStartYear, birthdayEndYear, minAge, maxAge));
     }
 
-    private MapSqlParameterSource getMapSqlParameters(Integer sectionId, Integer groupId, String gender, Integer birthdayStartYear, Integer birthdayEndYear, Integer minAge, Integer maxAge) {
+    private MapSqlParameterSource getMapSqlParameters(Integer sectionId, Integer groupId, String gender,
+                                                      Integer birthdayStartYear, Integer birthdayEndYear,
+                                                      Integer minAge, Integer maxAge) {
         if (gender.trim().isEmpty()) {
             gender = null;
         }

@@ -7,70 +7,66 @@
 </head>
 <body>
 <div class="container">
-    <h2>Получить список и общее число туpистов, занимающихся в клубе, в указанной секции, гpуппе, по половому пpизнаку, году pождения, возpасту.</h2>
-    <div class="row">
+    <h3 class="mt-4">Получить список и общее число туpистов, занимающихся в клубе, в указанной секции, гpуппе, по половому пpизнаку, году pождения, возpасту.</h3>
+    <form action="/query/1" method="post" class="row mt-4">
         <div class="col-md-3">
-            <h3>Количество туристов</h3>
-            <div id="touristCount" th:text="${count}">Введите параметры фильтрации и нажмите "Найти"</div>
+            <div class="form-group">
+                <label for="section">Секция:</label>
+                <select class="form-control" id="section" name="sectionId">
+                    <option value="">Любая</option>
+                    <option th:if="${sectionList == null}" value="" disabled>Секций не найдено</option>
+                    <option th:each="section : ${sectionList}"
+                            th:value="${section.id}"
+                            th:text="${section.name}"
+                            th:selected="${section.id} == ${sectionId}"
+                            th:unless="${sectionList == null}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="group">Группа:</label>
+                <select class="form-control" id="group" name="groupId">
+                    <option value="">Любая</option>
+                    <option th:if="${groupList == null}" value="" disabled>Групп не найдено</option>
+                    <option th:each="group : ${groupList}"
+                            th:value="${group.id}"
+                            th:text="${group.id} + ' - ' + ${group.name}"
+                            th:selected="${group.id} == ${groupId}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Пол</label>
+                <select class="form-control" id="gender" name="gender">
+                    <option value="">Любой</option>
+                    <option value="male">Мужской</option>
+                    <option value="female">Женский</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="birthdayStartYear">Год рождения (от)</label>
+                <input type="number" class="form-control" id="birthdayStartYear" name="birthdayStartYear">
+            </div>
+            <div class="form-group">
+                <label for="birthdayEndYear">Год рождения (до)</label>
+                <input type="number" class="form-control" id="birthdayEndYear" name="birthdayEndYear">
+            </div>
+            <div class="form-group">
+                <label for="minAge">Минимальный возраст</label>
+                <input type="number" class="form-control" id="minAge" name="minAge">
+            </div>
+            <div class="form-group">
+                <label for="maxAge">Максимальный возраст</label>
+                <input type="number" class="form-control" id="maxAge" name="maxAge">
+            </div>
+            <button type="submit" class="btn btn-primary">Найти</button>
         </div>
         <div class="col-md-9">
-            <form action="/query/1" method="post">
-                <!-- Выпадающий список для секции -->
-                <div class="form-group">
-                    <label for="section">Секция:</label>
-                    <select class="form-control" id="section" name="sectionId">
-                        <option value="">Любая</option>
-                        <option th:if="${sectionList == null}" value="" disabled>Секций не найдено</option>
-                        <option th:each="section : ${sectionList}"
-                                th:value="${section.id}"
-                                th:text="${section.name}"
-                                th:selected="${section.id} == ${sectionId}"
-                                th:unless="${sectionList == null}">
-                        </option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="group">Группа:</label>
-                    <select class="form-control" id="group" name="groupId">
-                        <option value="">Любая</option>
-                        <option th:if="${groupList == null}" value="" disabled>Групп не найдено</option>
-                        <option th:each="group : ${groupList}"
-                                th:value="${group.id}"
-                                th:text="${group.id} + ' - ' + ${group.name}"
-                                th:selected="${group.id} == ${groupId}">
-                        </option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="gender">Пол</label>
-                    <select class="form-control" id="gender" name="gender">
-                        <option value=>Любой</option>
-                        <option value="male">Мужской</option>
-                        <option value="female">Женский</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="birthdayStartYear">Год рождения (от)</label>
-                    <input type="number" class="form-control" id="birthdayStartYear" name="birthdayStartYear">
-                </div>
-                <div class="form-group">
-                    <label for="birthdayEndYear">Год рождения (до)</label>
-                    <input type="number" class="form-control" id="birthdayEndYear" name="birthdayEndYear">
-                </div>
-                <div class="form-group">
-                    <label for="minAge">Минимальный возраст</label>
-                    <input type="number" class="form-control" id="minAge" name="minAge">
-                </div>
-                <div class="form-group">
-                    <label for="maxAge">Максимальный возраст</label>
-                    <input type="number" class="form-control" id="maxAge" name="maxAge">
-                </div>
-                <button type="submit" class="btn btn-primary">Найти</button>
-            </form>
+            <h4>Количество туристов: <span id="touristCount" th:text="${count}">0</span></h4>
             <div id="touristList" class="mt-4">
-                <h3>Результаты</h3>
+                <h5>Результаты</h5>
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -85,7 +81,7 @@
                 </table>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
