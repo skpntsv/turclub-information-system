@@ -38,7 +38,7 @@ public class QueriesController {
 
 
     @GetMapping("/1")
-    public String getTouristsByCriteria1(Model model) {
+    public String getTouristsByCriteria(Model model) {
         model.addAttribute("sectionList", touristService.findAllSections());
         model.addAttribute("groupList", groupsService.findAllGroups());
         return "queries/1";
@@ -64,6 +64,63 @@ public class QueriesController {
         model.addAttribute("headers", tourists.isEmpty() ? List.of() : new ArrayList<>(tourists.get(0).keySet()));
 
         log.info("Executed query: 1");
+
+        model.addAttribute("sectionList", touristService.findAllSections());
+        model.addAttribute("groupList", groupsService.findAllGroups());
         return "queries/1";
+    }
+
+    @GetMapping("/2")
+    public String getTrainersByCriteria(Model model) {
+        model.addAttribute("sectionList", touristService.findAllSections());
+        model.addAttribute("specializationList", touristService.findAllSpecializations());
+        return "queries/2";
+    }
+
+    @PostMapping("/2")
+    public String getTrainersByCriteria(
+            @RequestParam(required = false) Integer sectionId,
+            @RequestParam(required = false) String gender,
+            @RequestParam(required = false) Integer age,
+            @RequestParam(required = false) Integer minSalary,
+            @RequestParam(required = false) Integer maxSalary,
+            @RequestParam(required = false) Integer specializationId,
+            Model model) {
+        log.info("Executing query: 2");
+        int count = queriesService.getCountTrainerByCriteria(sectionId, gender, age, minSalary, maxSalary, specializationId);
+        List<Map<String, Object>> trainers = queriesService.getTrainersByCriteria(sectionId, gender, age, minSalary, maxSalary, specializationId);
+        model.addAttribute("count", count);
+        model.addAttribute("trainers", trainers);
+        model.addAttribute("headers", trainers.isEmpty() ? List.of() : new ArrayList<>(trainers.get(0).keySet()));
+
+        log.info("Executed query: 2");
+
+        model.addAttribute("sectionList", touristService.findAllSections());
+        model.addAttribute("specializationList", touristService.findAllSpecializations());
+        return "queries/2";
+    }
+
+    // 3
+    @GetMapping("/3")
+    public String getCompetitionsBySection(Model model) {
+        model.addAttribute("sectionList", touristService.findAllSections());
+        return "queries/3";
+    }
+
+    @PostMapping("/3")
+    public String getCompetitionsBySection(
+            @RequestParam(required = false) Integer sectionId,
+            Model model) {
+        log.info("Executing query: 3");
+        List<Map<String, Object>> competitions = queriesService.getCompetitionBySection(sectionId);
+        int count = queriesService.getCountCompetitionBySection(sectionId);
+        model.addAttribute("count", count);
+        model.addAttribute("competitions", competitions);
+        model.addAttribute("headers", competitions.isEmpty() ? List.of() : new ArrayList<>(competitions.get(0).keySet()));
+
+        log.info("Executed query: 3");
+
+        model.addAttribute("sectionList", touristService.findAllSections());
+        return "queries/3";
     }
 }
