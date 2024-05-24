@@ -98,6 +98,7 @@ CREATE TABLE IF NOT EXISTS Route (
 
 CREATE TABLE IF NOT EXISTS Hike (
 	id              SERIAL 			PRIMARY KEY,
+	name			VARCHAR(255),
 	plan_start_date TIMESTAMPTZ 	NOT NULL,
 	real_start_date TIMESTAMPTZ,
 	real_end_date   TIMESTAMPTZ,
