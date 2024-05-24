@@ -101,7 +101,14 @@ BEGIN
         UPDATE trainer
         SET termination_date = CURRENT_DATE
         WHERE id = OLD.id;
+    -- Проверяем, если новый тип "тренер", а старый тип не "тренер"
+    ELSIF UPPER(new_type_name) = 'ТРЕНЕР' AND UPPER(old_type_name) != 'ТРЕНЕР' THEN
+        -- Устанавливаем дату увольнения в NULL
+        UPDATE trainer
+        SET termination_date = NULL
+        WHERE id = NEW.id;
     END IF;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -110,3 +117,22 @@ CREATE TRIGGER set_termination_date_on_trainer_trigger
 AFTER UPDATE OF type_id ON Tourist
 FOR EACH ROW
 EXECUTE FUNCTION set_termination_date_on_trainer();
+
+-----------------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION delete_contact_info() RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM Contacts WHERE id = OLD.contact_id;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER delete_tourist_contact_info_trigger
+AFTER DELETE ON Tourist
+FOR EACH ROW
+EXECUTE FUNCTION delete_contact_info();
+
+CREATE TRIGGER delete_supervisor_contact_info_trigger
+AFTER DELETE ON SuperVisor
+FOR EACH ROW
+EXECUTE FUNCTION delete_contact_info();
