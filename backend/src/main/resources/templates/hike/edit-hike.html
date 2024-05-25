@@ -32,7 +32,7 @@
                     <option value="" disabled>Выберите инструктора</option>
                     <option th:each="instructor : ${instructorList}"
                             th:value="${instructor.id}"
-                            th:text="${instructor.fullName} + '-' + ${insturctor.type.name}"
+                            th:text="${instructor.fullName} + '-' + ${instructor.type.name} + '- Категория:' + ${instructor.category}"
                             th:selected="${instructor.id} == ${instructor.id}">
                     </option>
                 </select>
@@ -72,7 +72,7 @@
                     <option value="" disabled>Выберите маршрут</option>
                     <option th:each="route : ${routeList}"
                             th:value="${route.id}"
-                            th:text="${route.name}"
+                            th:text="${route.name} + '- Категория:' + ${route.difficultyCategory}"
                             th:selected="${route.id} == ${hike.route.id}">
                     </option>
                 </select>

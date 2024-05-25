@@ -38,27 +38,27 @@ public class HikeService {
         }
     }
 
-    public int saveHike(Hike hike) {
+    public void saveHike(Hike hike) {
         try {
-            return hikeDAO.save(hike);
+            hikeDAO.save(hike);
         } catch (Exception e) {
             log.error("Error saving hike: {}", hike, e);
             throw e;
         }
     }
 
-    public int updateHike(Hike hike) {
+    public void updateHike(Hike hike) {
         try {
-            return hikeDAO.update(hike);
+            hikeDAO.update(hike);
         } catch (Exception e) {
             log.error("Error updating hike: {}", hike, e);
             throw e;
         }
     }
 
-    public int deleteHikeById(Integer id) {
+    public void deleteHikeById(Integer id) {
         try {
-            return hikeDAO.deleteById(id);
+            hikeDAO.deleteById(id);
         } catch (Exception e) {
             log.error("Error deleting hike by ID: {}", id, e);
             throw e;

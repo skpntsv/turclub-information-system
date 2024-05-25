@@ -5,8 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.nsu.skopintsev.turclub.dao.TouristDAO;
 import ru.nsu.skopintsev.turclub.models.Hike;
 import ru.nsu.skopintsev.turclub.services.HikeService;
+import ru.nsu.skopintsev.turclub.services.RouteService;
 
 @Slf4j
 @Controller
@@ -14,9 +16,13 @@ import ru.nsu.skopintsev.turclub.services.HikeService;
 public class HikeController {
 
     private final HikeService hikeService;
+    private final RouteService routeService;
+    private final TouristDAO touristDAO;
 
-    public HikeController(HikeService hikeService) {
+    public HikeController(HikeService hikeService, RouteService routeService, TouristDAO touristDAO) {
         this.hikeService = hikeService;
+        this.routeService = routeService;
+        this.touristDAO = touristDAO;
     }
 
     @RequestMapping
@@ -52,6 +58,8 @@ public class HikeController {
                                Model model) {
         model.addAttribute("hike", hikeService.findHikeById(id));
         model.addAttribute("hikeTypeList", hikeService.findAllHikeTypes());
+        model.addAttribute("routeList", routeService.findAllRoutes());
+        model.addAttribute("instructorList", touristDAO.findAllInstructors());
 
 
         return "hike/edit-hike";
@@ -60,9 +68,21 @@ public class HikeController {
     @PostMapping("/update/{id}")
     public String updateHike(@PathVariable("id") Integer id,
                              @ModelAttribute("hike") Hike hike,
+                             Model model,
                              BindingResult bindingResult) {
         hike.setId(id);
-        hikeService.updateHike(hike);
+        try {
+            hikeService.updateHike(hike);
+        } catch (Exception e) {
+            log.error("Error updating hike", e);
+
+            model.addAttribute("hike", hikeService.findHikeById(id));
+            model.addAttribute("hikeTypeList", hikeService.findAllHikeTypes());
+            model.addAttribute("routeList", routeService.findAllRoutes());
+            model.addAttribute("instructorList", touristDAO.findAllInstructors());
+            model.addAttribute("error", e.getCause().getMessage());
+            return "hike/edit-hike";
+        }
 
         return "redirect:/hike";
     }

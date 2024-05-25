@@ -203,4 +203,13 @@ public class TouristService {
             throw e;
         }
     }
+
+    public List<Tourist> findAllInstructors() {
+        try {
+            return touristDAO.findAllInstructors();
+        } catch (Exception e) {
+            log.error("Error fetching all instructors", e);
+            throw e;
+        }
+    }
 }

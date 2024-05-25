@@ -111,4 +111,29 @@ public class TouristDAO implements DAO<Tourist, Integer> {
                 new BeanPropertyRowMapper<>(Tourist.TouristType.class),
                 id);
     }
+
+    public List<Tourist> findAllInstructors() {
+        String sql = "SELECT\n" +
+                "    t.id,\n" +
+                "    t.full_name,\n" +
+                "    t.gender,\n" +
+                "    t.birthday,\n" +
+                "    t.category,\n" +
+                "    tt.id AS type_id,\n" +
+                "    tt.name AS type_name,\n" +
+                "    c.id AS contact_id,\n" +
+                "    c.email,\n" +
+                "    c.main_phone,\n" +
+                "    c.reserve_phone,\n" +
+                "    c.emergency_phone\n" +
+                "FROM\n" +
+                "    Tourist t\n" +
+                "JOIN\n" +
+                "    Tourist_type tt ON t.type_id = tt.id\n" +
+                "JOIN\n" +
+                "    Contacts c ON t.contact_id = c.id\n" +
+                "WHERE\n" +
+                "    UPPER(tt.name) != UPPER(?);\n";
+        return jdbcTemplate.query(sql, new TouristRowMapper(), defaultTouristType);
+    }
 }
