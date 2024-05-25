@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import ru.nsu.skopintsev.turclub.mapper.HikeRowMapper;
 import ru.nsu.skopintsev.turclub.models.Hike;
 
 import java.util.List;
@@ -19,12 +20,31 @@ public class HikeDAO implements DAO<Hike, Integer> {
 
     @Override
     public List<Hike> findAll() {
-        return jdbcTemplate.query("SELECT * FROM hike", new BeanPropertyRowMapper<>(Hike.class));
+        String sql = "SELECT h.id AS hike_id, h.name AS hike_name, h.plan_start_date, h.real_start_date, h.real_end_date, h.is_planned, " +
+                "ht.id AS hike_type_id, ht.name AS hike_type_name, " +
+                "t.id AS tourist_id, t.full_name, tt.id AS type_id, tt.name AS type_name, " +
+                "r.id AS route_id, r.name AS route_name, r.length_meters " +
+                "FROM hike h " +
+                "JOIN hike_type ht ON h.hike_type_id = ht.id " +
+                "JOIN tourist t ON h.instructor_id = t.id " +
+                "JOIN tourist_type tt ON t.type_id = tt.id " +
+                "JOIN route r ON h.route_id = r.id";
+        return jdbcTemplate.query(sql, new HikeRowMapper());
     }
 
     @Override
     public Hike findById(Integer id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM hike WHERE id = ?", new BeanPropertyRowMapper<>(Hike.class), id);
+        String sql = "SELECT h.id AS hike_id, h.name AS hike_name, h.plan_start_date, h.real_start_date, h.real_end_date, h.is_planned, " +
+                "ht.id AS hike_type_id, ht.name AS hike_type_name, " +
+                "t.id AS tourist_id, t.full_name, tt.id AS type_id, tt.name AS type_name, " +
+                "r.id AS route_id, r.name AS route_name, r.length_meters " +
+                "FROM hike h " +
+                "JOIN hike_type ht ON h.hike_type_id = ht.id " +
+                "JOIN tourist t ON h.instructor_id = t.id " +
+                "JOIN tourist_type tt ON t.type_id = tt.id " +
+                "JOIN route r ON h.route_id = r.id " +
+                "WHERE h.id = ?";
+        return jdbcTemplate.queryForObject(sql, new HikeRowMapper(), id);
     }
 
     @Override

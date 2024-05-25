@@ -28,13 +28,12 @@
             </div>
             <div class="form-group">
                 <label for="instructor">Инструктор:</label>
-                <select class="form-control" id="instructor" name="instructor" th:field="${instructorList}">
+                <select class="form-control" id="instructor" name="instructor" th:field="${hike.tourist.id}">
                     <option value="" disabled>Выберите инструктора</option>
-                    <option value="">Никто</option>
                     <option th:each="instructor : ${instructorList}"
                             th:value="${instructor.id}"
                             th:text="${instructor.fullName} + '-' + ${instructor.type.name} + '- Категория:' + ${instructor.category}"
-                            th:selected="${instructor.id} == ${instructor.id}">
+                            th:selected="${instructor.id} == ${hike.tourist.id}">
                     </option>
                 </select>
             </div>
