@@ -30,6 +30,7 @@
                 <label for="instructor">Инструктор:</label>
                 <select class="form-control" id="instructor" name="instructor" th:field="${instructorList}">
                     <option value="" disabled>Выберите инструктора</option>
+                    <option value="">Никто</option>
                     <option th:each="instructor : ${instructorList}"
                             th:value="${instructor.id}"
                             th:text="${instructor.fullName} + '-' + ${instructor.type.name} + '- Категория:' + ${instructor.category}"
@@ -51,7 +52,7 @@
             </div>
             <div class="form-group">
                 <label for="isPlanned">Плановый/неплановый:</label>
-                <input type="checkbox" class="form-control" id="isPlanned" name="hike.isPlanned" th:field="${hike.isPlanned}" required/>
+                <input type="checkbox" class="form-control" id="isPlanned" name="hike.isPlanned" th:field="${hike.isPlanned}"/>
             </div>
 
             <div class="form-group">

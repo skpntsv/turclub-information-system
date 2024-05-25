@@ -68,8 +68,8 @@ public class HikeController {
     @PostMapping("/update/{id}")
     public String updateHike(@PathVariable("id") Integer id,
                              @ModelAttribute("hike") Hike hike,
-                             Model model,
-                             BindingResult bindingResult) {
+                             BindingResult bindingResult,
+                             Model model) {
         hike.setId(id);
         try {
             hikeService.updateHike(hike);

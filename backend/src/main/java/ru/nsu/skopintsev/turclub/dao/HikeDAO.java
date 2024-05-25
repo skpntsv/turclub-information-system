@@ -42,6 +42,7 @@ public class HikeDAO implements DAO<Hike, Integer> {
 
     @Override
     public int update(Hike hike) {
+        validation(hike);
         return jdbcTemplate.update("UPDATE hike SET name = ?, plan_start_date = ?, real_start_date = ?, real_end_date = ?, is_planned = ?, hike_type_id = ?, instructor_id = ?, route_id = ? WHERE id = ?",
                 hike.getName(),
                 hike.getPlanStartDate(),
@@ -61,5 +62,20 @@ public class HikeDAO implements DAO<Hike, Integer> {
 
     public List<Hike.HikeType> findAllHikeTypes() {
         return jdbcTemplate.query("SELECT h.id, h.name  FROM hike_type h", new BeanPropertyRowMapper<>(Hike.HikeType.class));
+    }
+
+    private void validation(Hike hike) {
+        if (hike.getName() == null || hike.getName().isEmpty()) {
+            hike.setName(null);
+        }
+        if (hike.getPlanStartDate() == null) {
+            hike.setPlanStartDate(null);
+        }
+        if (hike.getRealStartDate() == null) {
+            hike.setRealStartDate(null);
+        }
+        if (hike.getRealEndDate() == null) {
+            hike.setRealEndDate(null);
+        }
     }
 }
