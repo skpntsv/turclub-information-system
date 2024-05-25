@@ -12,4 +12,4 @@ WHERE
     (:age IS NULL OR DATE_PART('year', AGE(t.birthday)) = :age) AND
     (:min_salary IS NULL OR tr.salary >= :min_salary) AND
     (:max_salary IS NULL OR tr.salary <= :max_salary) AND
-    (:specialization IS NULL OR sp.id = :specialization_id);
+    (:specialization_id IS NULL OR sp.id = :specialization_id);
