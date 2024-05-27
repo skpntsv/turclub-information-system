@@ -1,5 +1,5 @@
 SELECT
-    COUNT(DISTINCT r.id)
+    COUNT(DISTINCT r.id) AS "Кол-во маршрутов"
 FROM
     Route r
 JOIN

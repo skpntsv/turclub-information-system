@@ -1,6 +1,6 @@
 SELECT
-    r.id,
-    r.name
+    r.id AS ID,
+    r.name AS Название
 FROM
     Route r
 JOIN
