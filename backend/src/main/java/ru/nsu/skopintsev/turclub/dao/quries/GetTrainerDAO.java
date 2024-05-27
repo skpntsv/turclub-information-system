@@ -3,7 +3,6 @@ package ru.nsu.skopintsev.turclub.dao.quries;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.List;
 import java.util.Map;
@@ -55,15 +54,16 @@ public class GetTrainerDAO {
                 getMapSqlParameters(sectionId, gender, age, minSalary, maxSalary, specializationId));
     }
 
-    public List<Map<String, Object>> getTrainerByGroupsAndTime(Integer groupId, Date startDate, Date endDate) {
+    public List<Map<String, Object>> getTrainerByGroupsAndTime(Integer groupId, Timestamp startDate, Timestamp endDate) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
 
         mapSqlParameterSource.addValue("group_id", groupId, Types.INTEGER);
-        mapSqlParameterSource.addValue("start_date", startDate, Types.DATE);
-        mapSqlParameterSource.addValue("end_date", endDate, Types.DATE);
+        mapSqlParameterSource.addValue("start_date", startDate, Types.TIMESTAMP);
+        mapSqlParameterSource.addValue("end_date", endDate, Types.TIMESTAMP);
 
         return namedParameterJdbcTemplate.queryForList(
-                loadQueryFromFile(pathToGetTrainerByGroupsAndTime),mapSqlParameterSource);
+                loadQueryFromFile(pathToGetTrainerByGroupsAndTime),
+                mapSqlParameterSource);
     }
 
     private MapSqlParameterSource getMapSqlParameters(Integer sectionId, String gender,

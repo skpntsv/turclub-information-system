@@ -8,7 +8,7 @@ import ru.nsu.skopintsev.turclub.dao.quries.GetCompetitionDAO;
 import ru.nsu.skopintsev.turclub.dao.quries.GetTouristsDAO;
 import ru.nsu.skopintsev.turclub.dao.quries.GetTrainerDAO;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -89,7 +89,7 @@ public class QueriesService {
         }
     }
 
-    public List<Map<String, Object>> getTrainerByGroupsAndTime(Integer groupId, Date startDate, Date endDate) {
+    public List<Map<String, Object>> getTrainerByGroupsAndTime(Integer groupId, Timestamp startDate, Timestamp endDate) {
         try {
             return getTrainerDAO.getTrainerByGroupsAndTime(groupId, startDate, endDate);
         } catch (Exception e) {

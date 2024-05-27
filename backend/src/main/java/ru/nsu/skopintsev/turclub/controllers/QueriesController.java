@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 import ru.nsu.skopintsev.turclub.services.*;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -141,19 +141,14 @@ public class QueriesController {
     @PostMapping("/4")
     public String getTrainerByGroupsAndTime(
             @RequestParam(required = false) Integer groupId,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDateParam,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDateParam,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
             Model model) {
         log.info("Executing query: 4");
 
-        java.sql.Date startDate = null, endDate = null;
-        if (startDateParam != null) {
-            startDate = new java.sql.Date(startDateParam.getTime());
-        }
-        if (endDateParam != null) {
-            endDate = new java.sql.Date(endDateParam.getTime());
-        }
-        List<Map<String, Object>> trainers = queriesService.getTrainerByGroupsAndTime(groupId, startDate, endDate);
+        Timestamp startTimestamp = startDate != null ? Timestamp.valueOf(startDate) : null;
+        Timestamp endTimestamp = endDate != null ? Timestamp.valueOf(endDate) : null;
+        List<Map<String, Object>> trainers = queriesService.getTrainerByGroupsAndTime(groupId, startTimestamp, endTimestamp);
         model.addAttribute("trainers", trainers);
         model.addAttribute("headers", trainers.isEmpty() ? List.of() : new ArrayList<>(trainers.get(0).keySet()));
 
