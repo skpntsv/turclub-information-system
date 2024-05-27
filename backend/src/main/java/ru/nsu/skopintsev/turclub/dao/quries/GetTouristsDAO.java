@@ -26,6 +26,7 @@ public class GetTouristsDAO {
     private static final String pathToGetTouristByHike = "DML/queries/5/get_tourist_by_hike.sql";
     private static final String pathToGetCountTouristByHike = "DML/queries/5/get_count_tourist_by_hike.sql";
     private static final String pathToGetTouristByHike10 = "DML/queries/10/get_tourist_by_hikes.sql";
+    private static final String pathToGetInstructorByCriteria = "DML/queries/11/get_instructors_by_criteria.sql";
 
     @Autowired
     public GetTouristsDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -123,5 +124,20 @@ public class GetTouristsDAO {
             log.error("Failed to load query from file: {}", fileName, e);
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Map<String, Object>> getInstructorByCriteria(Integer category, Integer touristType, Integer hikeCount, Integer hikeId, Integer routeId, Integer checkpointId) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("category", category, Types.INTEGER);
+        params.addValue("tourist_type", touristType, Types.INTEGER);
+        params.addValue("hike_count", hikeCount, Types.INTEGER);
+        params.addValue("hike_id", hikeId, Types.INTEGER);
+        params.addValue("route_id", routeId, Types.INTEGER);
+        params.addValue("checkpoint_id", checkpointId, Types.INTEGER);
+
+        return namedParameterJdbcTemplate.queryForList(
+                loadQueryFromFile(pathToGetInstructorByCriteria),
+                params
+        );
     }
 }

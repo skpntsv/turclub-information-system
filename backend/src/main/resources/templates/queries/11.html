@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Запросы</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div class="container">
+    <h3 class="mt-4">Получить перечень и общее число инстpуктоpов, инстpуктоpов-споpтсменов, инстpуктоpов-тpенеpов, котоpые имеют определенную категоpию, котоpые ходили в указанное количество походов, ходили в определенный поход, ходили по некоторому маpшpуту, были в указанной точке.</h3>
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <h4>Фильтры</h4>
+            <form action="/query/11" method="post">
+                <!---------------------------------------------------------------------------------------------------------->
+                <div class="form-group">
+                    <label for="category">Категория:</label>
+                    <input type="number" class="form-control" id="category" name="category">
+                </div>
+
+                <div class="form-group">
+                    <label for="touristType">Тип туриста:</label>
+                    <select class="form-control" id="touristType" name="touristType">
+                        <option value="">Любой</option>
+                        <option th:each="type : ${touristTypeList}"
+                                th:value="${type.id}"
+                                th:text="${type.name}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="hikeCount">Минимальное количество походов:</label>
+                    <input type="number" class="form-control" id="hikeCount" name="hikeCount">
+                </div>
+
+                <div class="form-group">
+                    <label for="hike">Поход:</label>
+                    <select class="form-control" id="hike" name="hikeId">
+                        <option value="">Любой</option>
+                        <option th:each="hike : ${hikeList}"
+                                th:value="${hike.id}"
+                                th:text="${hike.name}"
+                                th:selected="${hike.id} == ${hikeId}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="route">Маршрут:</label>
+                    <select class="form-control" id="route" name="routeId">
+                        <option value="">Любой</option>
+                        <option th:each="route : ${routeList}"
+                                th:value="${route.id}"
+                                th:text="${route.name}"
+                                th:selected="${route.id} == ${routeId}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="checkpointId">Контрольная точка:</label>
+                    <select class="form-control" id="checkpointId" name="checkpointId">
+                        <option value="">Любая</option>
+                        <option th:each="checkpoint : ${checkpointList}"
+                                th:value="${checkpoint.id}"
+                                th:text="${checkpoint.description}">
+                        </option>
+                    </select>
+                </div>
+                <!---------------------------------------------------------------------------------------------------------->
+                <div class="d-flex justify-content-between mt-1">
+                    <a href="/query" class="btn btn-back">Назад</a>
+                    <button type="submit" class="btn btn-find">Найти</button>
+                </div>
+                <a href="/" class="btn btn-main-menu btn-block mt-4">Главное меню</a>
+            </form>
+        </div>
+        <div class="col-md-9">
+            <h4>Количество туристов: <span id="touristCount" th:text="${count}">0</span></h4>
+            <div id="touristList" class="mt-4">
+                <h5>Результаты</h5>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th th:each="header : ${headers}">[[${header}]]</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="line : ${lines}">
+                        <td th:each="field : ${line.values()}" th:text="${field}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

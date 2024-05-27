@@ -164,4 +164,13 @@ public class QueriesService {
             throw e;
         }
     }
+
+    public List<Map<String, Object>> getInstructorByCriteria(Integer category, Integer touristType, Integer hikeCount, Integer hikeId, Integer routeId, Integer checkpointId) {
+        try {
+            return getTouristsDAO.getInstructorByCriteria(category, touristType, hikeCount, hikeId, routeId, checkpointId);
+        } catch (Exception e) {
+            log.error("Error execute query[getInstructorByCriteria]", e);
+            throw e;
+        }
+    }
 }

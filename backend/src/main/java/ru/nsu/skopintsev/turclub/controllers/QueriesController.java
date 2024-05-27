@@ -346,4 +346,40 @@ public class QueriesController {
         model.addAttribute("sectionList", sectionService.findAllSections());
         return "queries/10";
     }
+
+    @GetMapping("/11")
+    public String getInstructorByCriteria(Model model) {
+        model.addAttribute("touristTypeList", touristService.findAllTouristTypes());
+        model.addAttribute("checkpointList", checkPointService.findAllCheckpoints());
+        model.addAttribute("hikeList", hikeService.findAllHikes());
+        model.addAttribute("routeList", routeService.findAllRoutes());
+        return "queries/11";
+    }
+
+    @PostMapping("/11")
+    public String getInstructorByCriteria(
+            @RequestParam(required = false) Integer category,
+            @RequestParam(required = false) Integer touristType,
+            @RequestParam(required = false) Integer hikeCount,
+            @RequestParam(required = false) Integer hikeId,
+            @RequestParam(required = false) Integer routeId,
+            @RequestParam(required = false) Integer checkpointId,
+            Model model) {
+        log.info("Executing query: 11");
+
+        List<Map<String, Object>> lines = queriesService.getInstructorByCriteria(category, touristType, hikeCount, hikeId, routeId, checkpointId);
+        int count = lines.size();
+        model.addAttribute("count", count);
+
+        model.addAttribute("lines", lines);
+        model.addAttribute("headers", lines.isEmpty() ? List.of() : new ArrayList<>(lines.get(0).keySet()));
+
+        log.info("Executed query: 11");
+
+        model.addAttribute("touristTypeList", touristService.findAllTouristTypes());
+        model.addAttribute("checkpointList", checkPointService.findAllCheckpoints());
+        model.addAttribute("hikeList", hikeService.findAllHikes());
+        model.addAttribute("routeList", routeService.findAllRoutes());
+        return "queries/11";
+    }
 }
