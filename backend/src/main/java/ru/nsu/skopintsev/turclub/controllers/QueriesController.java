@@ -27,15 +27,17 @@ public class QueriesController {
     private final HikeService hikeService;
     private final RouteService routeService;
     private final CheckPointService checkPointService;
+    private final SectionService sectionService;
 
     @Autowired
-    public QueriesController(QueriesService queriesService, TouristService touristService, GroupsService groupsService, HikeService hikeService, RouteService routeService, CheckPointService checkPointService) {
+    public QueriesController(QueriesService queriesService, TouristService touristService, GroupsService groupsService, HikeService hikeService, RouteService routeService, CheckPointService checkPointService, SectionService sectionService) {
         this.queriesService = queriesService;
         this.touristService = touristService;
         this.groupsService = groupsService;
         this.hikeService = hikeService;
         this.routeService = routeService;
         this.checkPointService = checkPointService;
+        this.sectionService = sectionService;
     }
 
     @GetMapping
@@ -46,7 +48,7 @@ public class QueriesController {
 
     @GetMapping("/1")
     public String getTouristsByCriteria(Model model) {
-        model.addAttribute("sectionList", touristService.findAllSections());
+        model.addAttribute("sectionList", sectionService.findAllSections());
         model.addAttribute("groupList", groupsService.findAllGroups());
         return "queries/1";
     }
@@ -72,14 +74,14 @@ public class QueriesController {
 
         log.info("Executed query: 1");
 
-        model.addAttribute("sectionList", touristService.findAllSections());
+        model.addAttribute("sectionList", sectionService.findAllSections());
         model.addAttribute("groupList", groupsService.findAllGroups());
         return "queries/1";
     }
 
     @GetMapping("/2")
     public String getTrainersByCriteria(Model model) {
-        model.addAttribute("sectionList", touristService.findAllSections());
+        model.addAttribute("sectionList", sectionService.findAllSections());
         model.addAttribute("specializationList", touristService.findAllSpecializations());
         return "queries/2";
     }
@@ -102,7 +104,7 @@ public class QueriesController {
 
         log.info("Executed query: 2");
 
-        model.addAttribute("sectionList", touristService.findAllSections());
+        model.addAttribute("sectionList", sectionService.findAllSections());
         model.addAttribute("specializationList", touristService.findAllSpecializations());
         return "queries/2";
     }
@@ -110,7 +112,7 @@ public class QueriesController {
     // 3
     @GetMapping("/3")
     public String getCompetitionsBySection(Model model) {
-        model.addAttribute("sectionList", touristService.findAllSections());
+        model.addAttribute("sectionList", sectionService.findAllSections());
         return "queries/3";
     }
 
@@ -127,7 +129,7 @@ public class QueriesController {
 
         log.info("Executed query: 3");
 
-        model.addAttribute("sectionList", touristService.findAllSections());
+        model.addAttribute("sectionList", sectionService.findAllSections());
         return "queries/3";
     }
 
@@ -161,7 +163,7 @@ public class QueriesController {
     // 5
     @GetMapping("/5")
     public String getTrainerBySpecializationAndTime(Model model) {
-        model.addAttribute("sectionList", touristService.findAllSections());
+        model.addAttribute("sectionList", sectionService.findAllSections());
         model.addAttribute("groupList", groupsService.findAllGroups());
         model.addAttribute("hikeList", hikeService.findAllHikes());
         model.addAttribute("routeList", routeService.findAllRoutes());
@@ -189,7 +191,7 @@ public class QueriesController {
 
         log.info("Executed query: 5");
 
-        model.addAttribute("sectionList", touristService.findAllSections());
+        model.addAttribute("sectionList", sectionService.findAllSections());
         model.addAttribute("groupList", groupsService.findAllGroups());
         model.addAttribute("hikeList", hikeService.findAllHikes());
         model.addAttribute("routeList", routeService.findAllRoutes());

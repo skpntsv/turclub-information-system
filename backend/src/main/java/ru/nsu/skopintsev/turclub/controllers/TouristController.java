@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.nsu.skopintsev.turclub.models.Section;
 import ru.nsu.skopintsev.turclub.models.Tourist;
 import ru.nsu.skopintsev.turclub.models.Trainer;
+import ru.nsu.skopintsev.turclub.services.SectionService;
 import ru.nsu.skopintsev.turclub.services.TouristService;
 
 import java.util.List;
@@ -20,13 +21,15 @@ import java.util.Optional;
 @RequestMapping("/tourist")
 public class TouristController {
     private final TouristService touristService;
+    private final SectionService sectionService;
 
     @Value("${tourist.trainer.type}")
     private String trainerName;
 
     @Autowired
-    public TouristController(TouristService touristService) {
+    public TouristController(TouristService touristService, SectionService sectionService) {
         this.touristService = touristService;
+        this.sectionService = sectionService;
     }
 
     @GetMapping
@@ -85,7 +88,7 @@ public class TouristController {
         }
 
         List<Trainer.Specialization> specialization = touristService.findAllSpecializations();
-        List<Section> sections = touristService.findAllSections();
+        List<Section> sections = sectionService.findAllSections();
         model.addAttribute("specializationList", specialization);
         model.addAttribute("sectionList", sections);
 

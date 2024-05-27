@@ -118,15 +118,6 @@ public class TouristService {
         }
     }
 
-    public List<Section> findAllSections() {
-        try {
-            return sectionDAO.findAll();
-        } catch (Exception e) {
-            log.error("Error fetching all section", e);
-            throw e;
-        }
-    }
-
     public void saveTourist(Tourist tourist) {
         try {
             Contacts contacts = tourist.getContacts();
