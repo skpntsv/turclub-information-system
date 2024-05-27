@@ -258,4 +258,35 @@ public class QueriesController {
         log.info("Executed query: 7");
         return "queries/7";
     }
+
+    @GetMapping("/8")
+    public String getRouteByCriteria(Model model) {
+        model.addAttribute("sectionList", sectionService.findAllSections());
+        model.addAttribute("instructorList", touristService.findAllInstructors());
+        return "queries/8";
+    }
+
+    @PostMapping("/8")
+    public String getRouteByCriteria(
+            @RequestParam(required = false) Integer instructorId,
+            @RequestParam(required = false) Integer sectionId,
+            @RequestParam(required = false) Integer groupCount,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime endDate,
+            Model model) {
+        log.info("Executing query: 8");
+
+        Timestamp startTimestamp = startDate != null ? Timestamp.valueOf(startDate) : null;
+        Timestamp endTimestamp = endDate != null ? Timestamp.valueOf(endDate) : null;
+
+        List<Map<String, Object>> lines = queriesService.getRouteByCriteria(sectionId, instructorId, groupCount, startTimestamp, endTimestamp);
+        int count = lines.size();
+        model.addAttribute("count", count);
+
+        model.addAttribute("lines", lines);
+        model.addAttribute("headers", lines.isEmpty() ? List.of() : new ArrayList<>(lines.get(0).keySet()));
+
+        log.info("Executed query: 8");
+        return "queries/8";
+    }
 }

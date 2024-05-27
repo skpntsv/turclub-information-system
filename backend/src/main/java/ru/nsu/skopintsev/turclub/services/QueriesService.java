@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.nsu.skopintsev.turclub.dao.quries.GetCompetitionDAO;
-import ru.nsu.skopintsev.turclub.dao.quries.GetSuperVisorDAO;
-import ru.nsu.skopintsev.turclub.dao.quries.GetTouristsDAO;
-import ru.nsu.skopintsev.turclub.dao.quries.GetTrainerDAO;
+import ru.nsu.skopintsev.turclub.dao.quries.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -23,13 +20,15 @@ public class QueriesService {
     private final GetTrainerDAO getTrainerDAO;
     private final GetCompetitionDAO getCompetitionDAO;
     private final GetSuperVisorDAO getSuperVisorDAO;
+    private final GetRouteDAO getRouteDAO;
 
     @Autowired
-    public QueriesService(GetTouristsDAO getTouristsDAO, GetTrainerDAO getTrainerDAO, GetCompetitionDAO getCompetitionDAO, GetSuperVisorDAO getSuperVisorDAO) {
+    public QueriesService(GetTouristsDAO getTouristsDAO, GetTrainerDAO getTrainerDAO, GetCompetitionDAO getCompetitionDAO, GetSuperVisorDAO getSuperVisorDAO, GetRouteDAO getRouteDAO) {
         this.getTouristsDAO = getTouristsDAO;
         this.getTrainerDAO = getTrainerDAO;
         this.getCompetitionDAO = getCompetitionDAO;
         this.getSuperVisorDAO = getSuperVisorDAO;
+        this.getRouteDAO = getRouteDAO;
     }
 
     public int getCountTouristByCriteria(Integer sectionId, Integer groupId, String gender,
@@ -136,6 +135,15 @@ public class QueriesService {
             return getTrainerDAO.getScheduleTrainerByCriteria(trainerId, sectionId, startDate, endDate);
         } catch (Exception e) {
             log.error("Error execute query[getScheduleTrainerByCriteria]", e);
+            throw e;
+        }
+    }
+
+    public List<Map<String, Object>> getRouteByCriteria(Integer sectionId, Integer instructorId, Integer groupCount, Timestamp startTimestamp, Timestamp endTimestamp) {
+        try {
+            return getRouteDAO.getRouteByCriteria(sectionId, instructorId, groupCount, startTimestamp, endTimestamp);
+        } catch (Exception e) {
+            log.error("Error execute query[getRouteByCriteria]", e);
             throw e;
         }
     }
