@@ -3,7 +3,7 @@ SELECT
     s.full_name AS ФИО, 
     s.salary AS Зарплата, 
     s.hire_date AS "Дата приёма на работу", 
-    c.email AS "Эл. почта", 
+    c.email AS "Эл. почта"
 FROM 
     SuperVisor s
 JOIN 
