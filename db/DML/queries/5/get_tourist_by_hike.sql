@@ -1,11 +1,13 @@
 SELECT
     t.id AS ID,
-    t.full_name AS ФИО
+    t.full_name AS ФИО,
+    h.id AS "ID похода",
+    h.name AS Поход
 FROM
     Tourist t
 JOIN
     Hike_Tourists ht ON t.id = ht.tourist_id
-JOIN
+LEFT JOIN
     Hike h ON ht.hike_id = h.id
 WHERE
     (:section_id IS NULL OR t.id IN (
@@ -25,8 +27,11 @@ WHERE
         JOIN sсhedule_hike_checkpoints shc ON rc.id = shc.route_checkpoints_id
         WHERE shc.hike_id = h.id AND rc.checkpoint_id = :point_id))
     AND (:max_category IS NULL OR t.category <= :max_category)
+    AND (:min_hikes IS NULL OR t.id IN (
+        SELECT ht2.tourist_id
+        FROM Hike_Tourists ht2
+        GROUP BY ht2.tourist_id
+        HAVING COUNT(ht2.hike_id) >= :min_hikes))
 GROUP BY
-    t.id, t.full_name, t.category
-HAVING
-    (:min_hikes IS NULL OR COUNT(h.id) >= :min_hikes)
+    t.id, t.full_name, h.id, h.name
 ORDER BY t.id;

@@ -1,8 +1,8 @@
 SELECT
-    tr.id,
-    t.full_name,
-    SUM(trn.duration) AS total_duration,
-    COUNT(trn.id) AS train_count
+    tr.id AS ID,
+    t.full_name AS ФИО,
+    SUM(EXTRACT(EPOCH FROM trn.duration)/3600) AS "Кол-во часов",
+    COUNT(trn.id) AS "Кол-во тренировок"
 FROM
     Training trn
 JOIN
