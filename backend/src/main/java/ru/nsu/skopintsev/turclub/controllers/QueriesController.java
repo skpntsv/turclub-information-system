@@ -230,4 +230,32 @@ public class QueriesController {
 
         return "queries/6";
     }
+
+    @GetMapping("/7")
+    public String getScheduleTrainersByCriteria(Model model) {
+        model.addAttribute("trainerList", sectionService.findAllTrainers());
+        model.addAttribute("sectionList", sectionService.findAllSections());
+        return "queries/7";
+    }
+
+    @PostMapping("/7")
+    public String getScheduleTrainersByCriteria(
+            @RequestParam(required = false) Integer trainerId,
+            @RequestParam(required = false) Integer sectionId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            Model model) {
+        log.info("Executing query: 7");
+
+        Date startDateSql = startDate != null ? Date.valueOf(startDate) : null;
+        Date endDateSql = endDate != null ? Date.valueOf(endDate) : null;
+
+        List<Map<String, Object>> lines = queriesService.getScheduleTrainersByCriteria(trainerId, sectionId, startDateSql, endDateSql);
+
+        model.addAttribute("lines", lines);
+        model.addAttribute("headers", lines.isEmpty() ? List.of() : new ArrayList<>(lines.get(0).keySet()));
+
+        log.info("Executed query: 7");
+        return "queries/7";
+    }
 }

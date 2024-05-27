@@ -130,4 +130,13 @@ public class QueriesService {
             throw e;
         }
     }
+
+    public List<Map<String, Object>> getScheduleTrainersByCriteria(Integer trainerId, Integer sectionId, Date startDate, Date endDate) {
+        try {
+            return getTrainerDAO.getScheduleTrainerByCriteria(trainerId, sectionId, startDate, endDate);
+        } catch (Exception e) {
+            log.error("Error execute query[getScheduleTrainerByCriteria]", e);
+            throw e;
+        }
+    }
 }

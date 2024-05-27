@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.List;
@@ -24,6 +25,7 @@ public class GetTrainerDAO {
     private static final String pathToGetTrainerByCriteria = "DML/queries/2/get_trainer_by_criteria.sql";
     private static final String pathToGetCountTrainerByCriteria = "DML/queries/2/get_count_trainer_by_criteria.sql";
     private static final String pathToGetTrainerByGroupsAndTime = "DML/queries/4/get_trainer_by_groups_and_time.sql";
+    private static final String pathToGetScheduleTrainerByCriteria = "DML/queries/7/get_schedule_trainer_by_criteria.sql";
 
     @Autowired
     public GetTrainerDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -90,5 +92,16 @@ public class GetTrainerDAO {
             log.error("Failed to load query from file: {}", fileName, e);
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Map<String, Object>> getScheduleTrainerByCriteria(Integer trainerId, Integer sectionId, Date startDate, Date endDate) {
+        return namedParameterJdbcTemplate.queryForList(
+                loadQueryFromFile(pathToGetScheduleTrainerByCriteria),
+                new MapSqlParameterSource()
+                        .addValue("trainer_id", trainerId, Types.INTEGER)
+                        .addValue("section_id", sectionId, Types.INTEGER)
+                        .addValue("start_date", startDate, Types.DATE)
+                        .addValue("end_date", endDate, Types.DATE)
+        );
     }
 }
