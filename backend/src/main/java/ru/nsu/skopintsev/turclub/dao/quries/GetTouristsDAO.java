@@ -70,15 +70,6 @@ public class GetTouristsDAO {
 
     // 5 запрос
     public List<Map<String, Object>> getTouristByHike(Integer sectionId, Integer groupId, Integer hikeId, Integer routeId, Integer pointId, Integer maxCategory, Integer minHikes) {
-        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("section_id", sectionId, Types.INTEGER);
-        mapSqlParameterSource.addValue("group_id", groupId, Types.INTEGER);
-        mapSqlParameterSource.addValue("hike_id", hikeId, Types.INTEGER);
-        mapSqlParameterSource.addValue("route_id", routeId, Types.INTEGER);
-        mapSqlParameterSource.addValue("point_id", pointId, Types.INTEGER);
-        mapSqlParameterSource.addValue("max_category", maxCategory, Types.INTEGER);
-        mapSqlParameterSource.addValue("min_hikes", minHikes, Types.INTEGER);
-
         return namedParameterJdbcTemplate.queryForList(
                 loadQueryFromFile(pathToGetTouristByHike),
                 getMapSqlParameters(sectionId, groupId, hikeId, routeId, pointId, maxCategory, minHikes));

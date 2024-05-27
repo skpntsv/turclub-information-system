@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 import ru.nsu.skopintsev.turclub.services.*;
 
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,11 +68,11 @@ public class QueriesController {
 
         log.info("Executing query: 1");
         int count = queriesService.getCountTouristByCriteria(sectionId, groupId, gender, birthdayStartYear, birthdayEndYear, minAge, maxAge);
-        List<Map<String, Object>> tourists = queriesService.getTouristsByCriteria(sectionId, groupId, gender, birthdayStartYear, birthdayEndYear, minAge, maxAge);
+        List<Map<String, Object>> lines = queriesService.getTouristsByCriteria(sectionId, groupId, gender, birthdayStartYear, birthdayEndYear, minAge, maxAge);
 
         model.addAttribute("count", count);
-        model.addAttribute("tourists", tourists);
-        model.addAttribute("headers", tourists.isEmpty() ? List.of() : new ArrayList<>(tourists.get(0).keySet()));
+        model.addAttribute("lines", lines);
+        model.addAttribute("headers", lines.isEmpty() ? List.of() : new ArrayList<>(lines.get(0).keySet()));
 
         log.info("Executed query: 1");
 
@@ -197,5 +199,35 @@ public class QueriesController {
         model.addAttribute("routeList", routeService.findAllRoutes());
         model.addAttribute("checkpointList", checkPointService.findAllCheckpoints());
         return "queries/5";
+    }
+
+    @GetMapping("/6")
+    public String getSuperVisorByCriteria(Model model) {
+
+        return "queries/6";
+    }
+
+    @PostMapping("/6")
+    public String getSuperVisorByCriteria(
+            @RequestParam(required = false) Double minSalary,
+            @RequestParam(required = false) Double maxSalary,
+            @RequestParam(required = false) Integer minBirthYear,
+            @RequestParam(required = false) Integer maxBirthYear,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate minHireDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate maxHireDate,
+            Model model) {
+        log.info("Executing query: 6");
+
+        Date minHireDateSql = minHireDate != null ? Date.valueOf(minHireDate) : null;
+        Date maxHireDateSql = maxHireDate != null ? Date.valueOf(maxHireDate) : null;
+
+        List<Map<String, Object>> superVisors = queriesService.getSuperVisorByCriteria(minSalary, maxSalary,
+                minBirthYear, maxBirthYear, minHireDateSql, maxHireDateSql);
+        model.addAttribute("lines", superVisors);
+        model.addAttribute("headers", superVisors.isEmpty() ? List.of() : new ArrayList<>(superVisors.get(0).keySet()));
+
+        log.info("Executed query: 6");
+
+        return "queries/6";
     }
 }

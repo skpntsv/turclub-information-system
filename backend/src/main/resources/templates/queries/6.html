@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Запросы</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div class="container">
+    <h3 class="mt-4">Получить перечень pуководителей секций полностью, по pазмеpу заpаботной платы, по году pождения, возpасту, году поступления на pаботу.</h3>
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <h4>Фильтры</h4>
+            <form action="/query/6" method="post">
+
+                <div class="form-group">
+                    <label for="minSalary">Минимальная зарплата:</label>
+                    <input type="number" class="form-control" id="minSalary" name="minSalary">
+                </div>
+                <div class="form-group">
+                    <label for="maxSalary">Максимальная зарплата:</label>
+                    <input type="number" class="form-control" id="maxSalary" name="maxSalary">
+                </div>
+                <div class="form-group">
+                    <label for="minBirthYear">Минимальный год рождения:</label>
+                    <input type="number" class="form-control" id="minBirthYear" name="minBirthYear">
+                </div>
+                <div class="form-group">
+                    <label for="maxBirthYear">Максимальный год рождения:</label>
+                    <input type="number" class="form-control" id="maxBirthYear" name="maxBirthYear">
+                </div>
+                <div class="form-group">
+                    <label for="minHireDate">Дата приёма на работу (от):</label>
+                    <input type="date" class="form-control" id="minHireDate" name="minHireDate">
+                </div>
+                <div class="form-group">
+                    <label for="maxHireDate">Дата приёма на работу (до):</label>
+                    <input type="date" class="form-control" id="maxHireDate" name="maxHireDate">
+                </div>
+
+                <div class="d-flex justify-content-between mt-1">
+                    <a href="/query" class="btn btn-back">Назад</a>
+                    <button type="submit" class="btn btn-find">Найти</button>
+                </div>
+                <a href="/" class="btn btn-main-menu btn-block mt-4">Главное меню</a>
+            </form>
+        </div>
+        <div class="col-md-9">
+            <h4>Количество туристов: <span id="touristCount" th:text="${count}">0</span></h4>
+            <div id="touristList" class="mt-4">
+                <h5>Результаты</h5>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th th:each="header : ${headers}">[[${header}]]</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="line : ${lines}">
+                        <td th:each="field : ${line.values()}" th:text="${field}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

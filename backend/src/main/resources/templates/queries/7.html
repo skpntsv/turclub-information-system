@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Запросы</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h3 class="mt-4">Статистика тренеров по критериям</h3>
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <h4>Фильтры</h4>
+            <form action="/query/7" method="post">
+                <div class="form-group">
+                    <label for="trainerId">Тренер:</label>
+                    <select class="form-control" id="trainerId" name="trainerId">
+                        <option value="">Любой</option>
+                        <option th:each="trainer : ${trainerList}" th:value="${trainer.id}" th:text="${trainer.full_name}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sectionId">Секция:</label>
+                    <select class="form-control" id="sectionId" name="sectionId">
+                        <option value="">Любая</option>
+                        <option th:each="section : ${sectionList}" th:value="${section.id}" th:text="${section.name}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="startDate">Дата начала:</label>
+                    <input type="date" class="form-control" id="startDate" name="startDate">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">Дата окончания:</label>
+                    <input type="date" class="form-control" id="endDate" name="endDate">
+                </div>
+                <button type="submit" class="btn btn-primary">Найти</button>
+            </form>
+        </div>
+        <div class="col-md-9">
+            <h4>Результаты поиска</h4>
+            <div th:if="${trainers != null}">
+                <table class="table table-striped">
+                    <thead>
+                    <tr th:each="header : ${headers}">
+                        <th th:text="${header}">Header</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="line : ${lines}">
+                        <td th:each="value : ${line.values()}" th:text="${value}">Value</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${lines == null}">
+                <p>Заполните фильтры и нажмите "Найти", чтобы отобразить результаты.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

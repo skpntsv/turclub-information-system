@@ -5,10 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nsu.skopintsev.turclub.dao.quries.GetCompetitionDAO;
+import ru.nsu.skopintsev.turclub.dao.quries.GetSuperVisorDAO;
 import ru.nsu.skopintsev.turclub.dao.quries.GetTouristsDAO;
 import ru.nsu.skopintsev.turclub.dao.quries.GetTrainerDAO;
 
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -19,12 +22,14 @@ public class QueriesService {
     private final GetTouristsDAO getTouristsDAO;
     private final GetTrainerDAO getTrainerDAO;
     private final GetCompetitionDAO getCompetitionDAO;
+    private final GetSuperVisorDAO getSuperVisorDAO;
 
     @Autowired
-    public QueriesService(GetTouristsDAO getTouristsDAO, GetTrainerDAO getTrainerDAO, GetCompetitionDAO getCompetitionDAO) {
+    public QueriesService(GetTouristsDAO getTouristsDAO, GetTrainerDAO getTrainerDAO, GetCompetitionDAO getCompetitionDAO, GetSuperVisorDAO getSuperVisorDAO) {
         this.getTouristsDAO = getTouristsDAO;
         this.getTrainerDAO = getTrainerDAO;
         this.getCompetitionDAO = getCompetitionDAO;
+        this.getSuperVisorDAO = getSuperVisorDAO;
     }
 
     public int getCountTouristByCriteria(Integer sectionId, Integer groupId, String gender,
@@ -112,6 +117,16 @@ public class QueriesService {
             return getTouristsDAO.getCountTouristByHike(sectionId, groupId, hikeId, routeId, pointId, maxCategory, minHikes);
         } catch (Exception e) {
             log.error("Error execute query[getCountTouristByHike]", e);
+            throw e;
+        }
+    }
+
+    public List<Map<String, Object>> getSuperVisorByCriteria(Double minSalary, Double maxSalary, Integer minBirthYear,
+                                                             Integer maxBirthYear, Date minHireDate, Date maxHireDate) {
+        try {
+            return getSuperVisorDAO.getSuperVisorByCriteria(minSalary, maxSalary, minBirthYear, maxBirthYear, minHireDate, maxHireDate);
+        } catch (Exception e) {
+            log.error("Error execute query[getSuperVisorByCriteria]", e);
             throw e;
         }
     }

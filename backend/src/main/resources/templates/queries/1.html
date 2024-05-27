@@ -13,6 +13,7 @@
         <div class="col-md-3">
             <h4>Фильтры</h4>
             <form action="/query/1" method="post">
+<!---------------------------------------------------------------------------------------------------------->
                 <div class="form-group">
                     <label for="section">Секция:</label>
                     <select class="form-control" id="section" name="sectionId">
@@ -48,22 +49,27 @@
                         <option value="female">Женский</option>
                     </select>
                 </div>
+
                 <div class="form-group">
                     <label for="birthdayStartYear">Год рождения (от)</label>
                     <input type="number" class="form-control" id="birthdayStartYear" name="birthdayStartYear">
                 </div>
+
                 <div class="form-group">
                     <label for="birthdayEndYear">Год рождения (до)</label>
                     <input type="number" class="form-control" id="birthdayEndYear" name="birthdayEndYear">
                 </div>
+
                 <div class="form-group">
                     <label for="minAge">Минимальный возраст</label>
                     <input type="number" class="form-control" id="minAge" name="minAge">
                 </div>
+
                 <div class="form-group">
                     <label for="maxAge">Максимальный возраст</label>
                     <input type="number" class="form-control" id="maxAge" name="maxAge">
                 </div>
+<!---------------------------------------------------------------------------------------------------------->
                 <div class="d-flex justify-content-between mt-1">
                     <a href="/query" class="btn btn-back">Назад</a>
                     <button type="submit" class="btn btn-find">Найти</button>
@@ -82,8 +88,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="tourist : ${tourists}">
-                        <td th:each="field : ${tourist.values()}" th:text="${field}"></td>
+                    <tr th:each="line : ${lines}">
+                        <td th:each="field : ${line.values()}" th:text="${field}"></td>
                     </tr>
                     </tbody>
                 </table>
