@@ -8,7 +8,6 @@ import ru.nsu.skopintsev.turclub.dao.quries.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -142,6 +141,15 @@ public class QueriesService {
     public List<Map<String, Object>> getRouteByCriteria(Integer sectionId, Integer instructorId, Integer groupCount, Timestamp startTimestamp, Timestamp endTimestamp) {
         try {
             return getRouteDAO.getRouteByCriteria(sectionId, instructorId, groupCount, startTimestamp, endTimestamp);
+        } catch (Exception e) {
+            log.error("Error execute query[getRouteByCriteria]", e);
+            throw e;
+        }
+    }
+
+    public List<Map<String, Object>> getRouteByCriteria(Integer checkpointId, Integer length, Integer category) {
+        try {
+            return getRouteDAO.getRouteByCriteria(checkpointId, length, category);
         } catch (Exception e) {
             log.error("Error execute query[getRouteByCriteria]", e);
             throw e;

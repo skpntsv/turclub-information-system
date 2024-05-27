@@ -20,7 +20,9 @@ import java.util.Map;
 public class GetRouteDAO {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private static final String pathToGetRouteByCriteria = "DML/queries/8/get_route_by_criteria.sql";
+    private static final String pathToGetRouteByCriteria8 = "DML/queries/8/get_route_by_criteria.sql";
+    private static final String pathToGetRouteByCriteria9 = "DML/queries/9/get_route_by_criteria.sql";
+
     @Autowired
     public GetRouteDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
@@ -35,7 +37,18 @@ public class GetRouteDAO {
         parameterSource.addValue("group_count", groupCount, Types.INTEGER);
 
         return namedParameterJdbcTemplate.queryForList(
-                loadQueryFromFile(pathToGetRouteByCriteria),
+                loadQueryFromFile(pathToGetRouteByCriteria8),
+                parameterSource);
+    }
+
+    public List<Map<String, Object>> getRouteByCriteria(Integer checkpointId, Integer length, Integer category) {
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("checkpoint_id", checkpointId, Types.INTEGER);
+        parameterSource.addValue("length", length, Types.INTEGER);
+        parameterSource.addValue("category", category, Types.INTEGER);
+
+        return namedParameterJdbcTemplate.queryForList(
+                loadQueryFromFile(pathToGetRouteByCriteria9),
                 parameterSource);
     }
 

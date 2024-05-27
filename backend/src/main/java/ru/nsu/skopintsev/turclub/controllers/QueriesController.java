@@ -287,6 +287,36 @@ public class QueriesController {
         model.addAttribute("headers", lines.isEmpty() ? List.of() : new ArrayList<>(lines.get(0).keySet()));
 
         log.info("Executed query: 8");
+
+        model.addAttribute("sectionList", sectionService.findAllSections());
+        model.addAttribute("instructorList", touristService.findAllInstructors());
         return "queries/8";
+    }
+
+    @GetMapping("/9")
+    public String getRouteByCriteria9(Model model) {
+        model.addAttribute("checkpointList", checkPointService.findAllCheckpoints());
+        return "queries/9";
+    }
+
+    @PostMapping("/9")
+    public String getRouteByCriteria9(
+            @RequestParam(required = false) Integer checkpointId,
+            @RequestParam(required = false) Integer length,
+            @RequestParam(required = false) Integer category,
+            Model model) {
+        log.info("Executing query: 9");
+
+        List<Map<String, Object>> lines = queriesService.getRouteByCriteria(checkpointId, length, category);
+        int count = lines.size();
+        model.addAttribute("count", count);
+
+        model.addAttribute("lines", lines);
+        model.addAttribute("headers", lines.isEmpty() ? List.of() : new ArrayList<>(lines.get(0).keySet()));
+
+        log.info("Executed query: 9");
+
+        model.addAttribute("checkpointList", checkPointService.findAllCheckpoints());
+        return "queries/9";
     }
 }
