@@ -155,4 +155,13 @@ public class QueriesService {
             throw e;
         }
     }
+
+    public List<Map<String, Object>> getTouristByHike(Integer sectionId, Integer groupId, Integer skill) {
+        try {
+            return getTouristsDAO.getTouristByHike(sectionId, groupId, skill);
+        } catch (Exception e) {
+            log.error("Error execute query[getTouristsByHike]", e);
+            throw e;
+        }
+    }
 }

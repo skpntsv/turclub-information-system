@@ -12,5 +12,5 @@ JOIN
 WHERE
     (:section_id IS NULL OR s.id = :section_id)
   AND (:group_id IS NULL OR g.id = :group_id)
-  AND (:skill <= t.category)
+  AND (COALESCE(:skill, 0) <= t.category)
 ORDER BY t.id;

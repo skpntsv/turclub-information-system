@@ -319,4 +319,31 @@ public class QueriesController {
         model.addAttribute("checkpointList", checkPointService.findAllCheckpoints());
         return "queries/9";
     }
+
+    @GetMapping("/10")
+    public String getTouristByHike(Model model) {
+        model.addAttribute("sectionList", sectionService.findAllSections());
+        return "queries/10";
+    }
+
+    @PostMapping("/10")
+    public String getTouristByHike(
+            @RequestParam(required = false) Integer sectionId,
+            @RequestParam(required = false) Integer groupId,
+            @RequestParam(required = false) Integer skill,
+            Model model) {
+        log.info("Executing query: 10");
+
+        List<Map<String, Object>> lines = queriesService.getTouristByHike(sectionId, groupId, skill);
+        int count = lines.size();
+        model.addAttribute("count", count);
+
+        model.addAttribute("lines", lines);
+        model.addAttribute("headers", lines.isEmpty() ? List.of() : new ArrayList<>(lines.get(0).keySet()));
+
+        log.info("Executed query: 10");
+
+        model.addAttribute("sectionList", sectionService.findAllSections());
+        return "queries/10";
+    }
 }

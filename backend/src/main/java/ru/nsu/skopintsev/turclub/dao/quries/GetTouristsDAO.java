@@ -25,6 +25,7 @@ public class GetTouristsDAO {
     private static final String pathToGetTouristByCriteria = "DML/queries/1/get_tourist_by_criteria.sql";
     private static final String pathToGetTouristByHike = "DML/queries/5/get_tourist_by_hike.sql";
     private static final String pathToGetCountTouristByHike = "DML/queries/5/get_count_tourist_by_hike.sql";
+    private static final String pathToGetTouristByHike10 = "DML/queries/10/get_tourist_by_hikes.sql";
 
     @Autowired
     public GetTouristsDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -73,6 +74,18 @@ public class GetTouristsDAO {
         return namedParameterJdbcTemplate.queryForList(
                 loadQueryFromFile(pathToGetTouristByHike),
                 getMapSqlParameters(sectionId, groupId, hikeId, routeId, pointId, maxCategory, minHikes));
+    }
+
+    //10 запрос
+    public List<Map<String, Object>> getTouristByHike(Integer sectionId, Integer groupId, Integer skill) {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("section_id", sectionId, Types.INTEGER)
+                .addValue("group_id", groupId, Types.INTEGER)
+                .addValue("skill", skill, Types.INTEGER);
+
+        return namedParameterJdbcTemplate.queryForList(
+                loadQueryFromFile(pathToGetTouristByHike10),
+                params);
     }
 
     private MapSqlParameterSource getMapSqlParameters(Integer sectionId, Integer groupId, Integer hikeId, Integer routeId, Integer pointId, Integer maxCategory, Integer minHikes) {
