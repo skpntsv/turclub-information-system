@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="container">
-    <h3 class="mt-4">Получить список соревнований по секции</h3>
+    <h3 class="mt-4">Получить перечень и общее число соpевнований, в котоpых участвовали споpтсмены из указанной секции, по всем секциям.</h3>
     <div class="row mt-4">
         <div class="col-md-3">
             <h4>Фильтры</h4>
@@ -21,7 +21,7 @@
                         <option th:each="section : ${sectionList}"
                                 th:value="${section.id}"
                                 th:text="${section.name}"
-                                th:selected="${section.id} == ${hike.sectionId}"
+                                th:selected="${section.id} == ${sectionId}"
                                 th:unless="${sectionList == null}">
                         </option>
                     </select>
