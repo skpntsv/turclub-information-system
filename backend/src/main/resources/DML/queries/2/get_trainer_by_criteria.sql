@@ -5,16 +5,16 @@ SELECT
         WHEN t.gender = 'female' THEN 'Женский'
         WHEN t.gender = 'male' THEN 'Мужской'
         ELSE t.gender
-        END AS Пол,
+    END AS Пол,
     t.birthday AS "Дата рождения",
     tr.salary AS "Зарплата",
     sp.name AS "Специализация",
     s.name AS "Секция"
 FROM
     Trainer tr
-        JOIN Tourist t ON tr.id = t.id
-        JOIN Section s ON tr.section_id = s.id
-        JOIN Specialization sp ON tr.specialization_id = sp.id
+    JOIN Tourist t ON tr.id = t.id
+    JOIN Section s ON tr.section_id = s.id
+    JOIN Specialization sp ON tr.specialization_id = sp.id
 WHERE
     tr.termination_date IS NULL AND -- Условие для вывода только действующих тренеров
     (:section_id IS NULL OR s.id = :section_id) AND
