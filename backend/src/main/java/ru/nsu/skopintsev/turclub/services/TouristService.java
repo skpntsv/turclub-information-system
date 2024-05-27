@@ -11,10 +11,7 @@ import ru.nsu.skopintsev.turclub.dao.ContactsDAO;
 import ru.nsu.skopintsev.turclub.dao.SectionDAO;
 import ru.nsu.skopintsev.turclub.dao.TouristDAO;
 import ru.nsu.skopintsev.turclub.dao.TrainerDAO;
-import ru.nsu.skopintsev.turclub.models.Contacts;
-import ru.nsu.skopintsev.turclub.models.Section;
-import ru.nsu.skopintsev.turclub.models.Tourist;
-import ru.nsu.skopintsev.turclub.models.Trainer;
+import ru.nsu.skopintsev.turclub.models.*;
 
 import java.util.List;
 import java.util.Optional;

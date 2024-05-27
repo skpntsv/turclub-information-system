@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Date;
 import java.sql.Types;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ public class GetTrainerDAO {
 
     private static final String pathToGetTrainerByCriteria = "DML/queries/2/get_trainer_by_criteria.sql";
     private static final String pathToGetCountTrainerByCriteria = "DML/queries/2/get_count_trainer_by_criteria.sql";
+    private static final String pathToGetTrainerByGroupsAndTime = "DML/queries/4/get_trainer_by_groups_and_time.sql";
 
     @Autowired
     public GetTrainerDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -51,6 +53,17 @@ public class GetTrainerDAO {
         return namedParameterJdbcTemplate.queryForList(
                 loadQueryFromFile(pathToGetTrainerByCriteria),
                 getMapSqlParameters(sectionId, gender, age, minSalary, maxSalary, specializationId));
+    }
+
+    public List<Map<String, Object>> getTrainerByGroupsAndTime(Integer groupId, Date startDate, Date endDate) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+
+        mapSqlParameterSource.addValue("group_id", groupId, Types.INTEGER);
+        mapSqlParameterSource.addValue("start_date", startDate, Types.DATE);
+        mapSqlParameterSource.addValue("end_date", endDate, Types.DATE);
+
+        return namedParameterJdbcTemplate.queryForList(
+                loadQueryFromFile(pathToGetTrainerByGroupsAndTime),mapSqlParameterSource);
     }
 
     private MapSqlParameterSource getMapSqlParameters(Integer sectionId, String gender,

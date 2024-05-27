@@ -8,6 +8,7 @@ import ru.nsu.skopintsev.turclub.dao.quries.GetCompetitionDAO;
 import ru.nsu.skopintsev.turclub.dao.quries.GetTouristsDAO;
 import ru.nsu.skopintsev.turclub.dao.quries.GetTrainerDAO;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -84,6 +85,33 @@ public class QueriesService {
             return getCompetitionDAO.getCompetitionBySection(sectionId);
         } catch (Exception e) {
             log.error("Error execute query[getCompetitionBySection]", e);
+            throw e;
+        }
+    }
+
+    public List<Map<String, Object>> getTrainerByGroupsAndTime(Integer groupId, Date startDate, Date endDate) {
+        try {
+            return getTrainerDAO.getTrainerByGroupsAndTime(groupId, startDate, endDate);
+        } catch (Exception e) {
+            log.error("Error execute query[getTrainerByGroupsAndTime]", e);
+            throw e;
+        }
+    }
+
+    public List<Map<String, Object>> getTouristByHike(Integer sectionId, Integer groupId, Integer hikeId, Integer routeId, Integer pointId, Integer maxCategory, Integer minHikes) {
+        try {
+            return getTouristsDAO.getTouristByHike(sectionId, groupId, hikeId, routeId, pointId, maxCategory, minHikes);
+        } catch (Exception e) {
+            log.error("Error execute query[getTouristsByHike]", e);
+            throw e;
+        }
+    }
+
+    public int getCountTouristByHike(Integer sectionId, Integer groupId, Integer hikeId, Integer routeId, Integer pointId, Integer maxCategory, Integer minHikes) {
+        try {
+            return getTouristsDAO.getCountTouristByHike(sectionId, groupId, hikeId, routeId, pointId, maxCategory, minHikes);
+        } catch (Exception e) {
+            log.error("Error execute query[getCountTouristByHike]", e);
             throw e;
         }
     }

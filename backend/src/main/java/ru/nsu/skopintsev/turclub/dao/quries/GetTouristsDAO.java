@@ -23,6 +23,8 @@ public class GetTouristsDAO {
 
     private static final String pathToGetCountTouristByCriteria = "DML/queries/1/get_count_tourist_by_criteria.sql";
     private static final String pathToGetTouristByCriteria = "DML/queries/1/get_tourist_by_criteria.sql";
+    private static final String pathToGetTouristByHike = "DML/queries/5/get_tourist_by_hike.sql";
+    private static final String pathToGetCountTouristByHike = "DML/queries/5/get_count_tourist_by_hike.sql";
 
     @Autowired
     public GetTouristsDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -51,6 +53,46 @@ public class GetTouristsDAO {
         return namedParameterJdbcTemplate.queryForList(
                 loadQueryFromFile(pathToGetTouristByCriteria),
                 getMapSqlParameters(sectionId, groupId, gender, birthdayStartYear, birthdayEndYear, minAge, maxAge));
+    }
+
+    // 5 запрос
+    public int getCountTouristByHike(Integer sectionId, Integer groupId, Integer hikeId, Integer routeId, Integer pointId, Integer maxCategory, Integer minHikes) throws DataAccessException {
+        try {
+            return Objects.requireNonNull(namedParameterJdbcTemplate.queryForObject(
+                    loadQueryFromFile(pathToGetCountTouristByHike),
+                    getMapSqlParameters(sectionId, groupId, hikeId, routeId, pointId, maxCategory, minHikes),
+                    Integer.class));
+        } catch (NullPointerException e) {
+            log.error("Error execute query[get_count_tourist_by_hike]", e);
+            throw e;
+        }
+    }
+
+    // 5 запрос
+    public List<Map<String, Object>> getTouristByHike(Integer sectionId, Integer groupId, Integer hikeId, Integer routeId, Integer pointId, Integer maxCategory, Integer minHikes) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("section_id", sectionId, Types.INTEGER);
+        mapSqlParameterSource.addValue("group_id", groupId, Types.INTEGER);
+        mapSqlParameterSource.addValue("hike_id", hikeId, Types.INTEGER);
+        mapSqlParameterSource.addValue("route_id", routeId, Types.INTEGER);
+        mapSqlParameterSource.addValue("point_id", pointId, Types.INTEGER);
+        mapSqlParameterSource.addValue("max_category", maxCategory, Types.INTEGER);
+        mapSqlParameterSource.addValue("min_hikes", minHikes, Types.INTEGER);
+
+        return namedParameterJdbcTemplate.queryForList(
+                loadQueryFromFile(pathToGetTouristByHike),
+                getMapSqlParameters(sectionId, groupId, hikeId, routeId, pointId, maxCategory, minHikes));
+    }
+
+    private MapSqlParameterSource getMapSqlParameters(Integer sectionId, Integer groupId, Integer hikeId, Integer routeId, Integer pointId, Integer maxCategory, Integer minHikes) {
+        return new MapSqlParameterSource()
+                .addValue("section_id", sectionId, Types.INTEGER)
+                .addValue("group_id", groupId, Types.INTEGER)
+                .addValue("hike_id", hikeId, Types.INTEGER)
+                .addValue("route_id", routeId, Types.INTEGER)
+                .addValue("point_id", pointId, Types.INTEGER)
+                .addValue("max_category", maxCategory, Types.INTEGER)
+                .addValue("min_hikes", minHikes, Types.INTEGER);
     }
 
     private MapSqlParameterSource getMapSqlParameters(Integer sectionId, Integer groupId, String gender,
