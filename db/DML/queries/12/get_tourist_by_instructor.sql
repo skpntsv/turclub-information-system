@@ -1,6 +1,6 @@
 SELECT
-    DISTINCT t.id,
-    t.full_name
+    DISTINCT t.id AS ID,
+    t.full_name AS ФИО
 FROM
     Tourist t
 JOIN

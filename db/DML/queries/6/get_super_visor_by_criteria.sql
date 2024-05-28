@@ -13,5 +13,4 @@ WHERE
     AND (:max_salary IS NULL OR s.salary <= :max_salary)
     AND (:min_birth_year IS NULL OR EXTRACT(YEAR FROM s.birthday) >= :min_birth_year)
     AND (:max_birth_year IS NULL OR EXTRACT(YEAR FROM s.birthday) <= :max_birth_year)
-    AND (:min_hire_date IS NULL OR s.hire_date >= :min_hire_date)
-    AND (:max_hire_date IS NULL OR s.hire_date <= :max_hire_date);
+    AND (s.hire_date >= COALESCE(:min_hire_date, s.hire_date) AND s.hire_date <= COALESCE(:max_hire_date, s.hire_date))

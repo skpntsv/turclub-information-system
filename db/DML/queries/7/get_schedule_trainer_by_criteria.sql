@@ -12,6 +12,6 @@ JOIN
 WHERE
     (:trainer_id IS NULL OR tr.id = :trainer_id)
     AND (:section_id IS NULL OR tr.section_id = :section_id)
-    AND ((:start_date IS NULL OR :end_date IS NULL) OR trn.plane_date BETWEEN :start_date AND :end_date)
+    AND (trn.plane_date >= COALESCE(:start_date, trn.plane_date) AND trn.plane_date <= COALESCE(:end_date, trn.plane_date))
 GROUP BY
     tr.id, t.full_name;

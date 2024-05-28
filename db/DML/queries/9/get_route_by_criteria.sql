@@ -10,4 +10,3 @@ WHERE
   AND (:length IS NULL OR r.length_meters > :length)
   AND (:category IS NULL OR r.difficulty_category > :category)
 GROUP BY r.id, r.name;
-
