@@ -182,4 +182,22 @@ public class QueriesService {
             throw e;
         }
     }
+
+    public List<Map<String, Object>> getTouristByRoutes(Integer groupId, Integer sectionId, Integer routeId) {
+        if (routeId == 0) {
+            try {
+                return getTouristsDAO.getTouristByAllRoutes(groupId, sectionId);
+            } catch (Exception e) {
+                log.error("Error execute query[getTouristByAllRoutes]", e);
+                throw e;
+            }
+        } else {
+            try {
+                return getTouristsDAO.getTouristByRoutes(groupId, sectionId, routeId);
+            } catch (Exception e) {
+                log.error("Error execute query[getTouristByRoutes]", e);
+                throw e;
+            }
+        }
+    }
 }

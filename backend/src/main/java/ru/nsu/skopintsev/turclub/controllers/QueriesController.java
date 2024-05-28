@@ -411,4 +411,33 @@ public class QueriesController {
         model.addAttribute("sectionList", sectionService.findAllSections());
         return "queries/12";
     }
+
+    @GetMapping("/13")
+    public String getTouristByRoutes(Model model) {
+        model.addAttribute("groupList", groupsService.findAllGroups());
+        model.addAttribute("sectionList", sectionService.findAllSections());
+        model.addAttribute("routeList", routeService.findAllRoutes());
+        return "queries/13";
+    }
+
+    @PostMapping("/13")
+    public String getTouristByRoutes(
+            @RequestParam(required = false) Integer sectionId,
+            @RequestParam(required = false) Integer groupId,
+            @RequestParam(required = false) Integer routeId,
+            Model model) {
+        log.info("Executing query: 13");
+
+        List<Map<String, Object>> lines = queriesService.getTouristByRoutes(groupId, sectionId, routeId);
+
+        model.addAttribute("lines", lines);
+        model.addAttribute("headers", lines.isEmpty() ? List.of() : new ArrayList<>(lines.get(0).keySet()));
+
+        log.info("Executed query: 13");
+
+        model.addAttribute("groupList", groupsService.findAllGroups());
+        model.addAttribute("sectionList", sectionService.findAllSections());
+        model.addAttribute("routeList", routeService.findAllRoutes());
+        return "queries/13";
+    }
 }

@@ -28,7 +28,8 @@ public class GetTouristsDAO {
     private static final String pathToGetTouristByHike10 = "DML/queries/10/get_tourist_by_hikes.sql";
     private static final String pathToGetInstructorByCriteria = "DML/queries/11/get_instructors_by_criteria.sql";
     private static final String pathToGetTouristByInstructor = "DML/queries/12/get_tourist_by_instructor.sql";
-
+    private static final String pathToGetTouristByAllRoutes = "DML/queries/13/get_tourist_by_all_routes.sql";
+    private static final String pathToGetTouristByRoutes = "DML/queries/13/get_tourist_by_routes.sql";
 
     @Autowired
     public GetTouristsDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -150,6 +151,29 @@ public class GetTouristsDAO {
 
         return namedParameterJdbcTemplate.queryForList(
                 loadQueryFromFile(pathToGetTouristByInstructor),
+                params
+        );
+    }
+
+    public List<Map<String, Object>> getTouristByAllRoutes(Integer groupId, Integer sectionId) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("group_id", groupId, Types.INTEGER);
+        params.addValue("section_id", sectionId, Types.INTEGER);
+
+        return namedParameterJdbcTemplate.queryForList(
+                loadQueryFromFile(pathToGetTouristByAllRoutes),
+                params
+        );
+    }
+
+    public List<Map<String, Object>> getTouristByRoutes(Integer groupId, Integer sectionId, Integer routeId) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("group_id", groupId, Types.INTEGER);
+        params.addValue("section_id", sectionId, Types.INTEGER);
+        params.addValue("route_ids", routeId, Types.INTEGER);
+
+        return namedParameterJdbcTemplate.queryForList(
+                loadQueryFromFile(pathToGetTouristByRoutes),
                 params
         );
     }
