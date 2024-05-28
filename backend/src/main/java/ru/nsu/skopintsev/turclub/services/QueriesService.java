@@ -173,4 +173,13 @@ public class QueriesService {
             throw e;
         }
     }
+
+    public List<Map<String, Object>> getTouristByInstructor(Integer groupId, Integer sectionId) {
+        try {
+            return getTouristsDAO.getTouristByInstructor(groupId, sectionId);
+        } catch (Exception e) {
+            log.error("Error execute query[getTouristByInstructor]", e);
+            throw e;
+        }
+    }
 }

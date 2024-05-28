@@ -256,6 +256,9 @@ public class QueriesController {
         model.addAttribute("headers", lines.isEmpty() ? List.of() : new ArrayList<>(lines.get(0).keySet()));
 
         log.info("Executed query: 7");
+
+        model.addAttribute("trainerList", sectionService.findAllTrainers());
+        model.addAttribute("sectionList", sectionService.findAllSections());
         return "queries/7";
     }
 
@@ -381,5 +384,31 @@ public class QueriesController {
         model.addAttribute("hikeList", hikeService.findAllHikes());
         model.addAttribute("routeList", routeService.findAllRoutes());
         return "queries/11";
+    }
+
+    @GetMapping("/12")
+    public String getTouristByInstructor(Model model) {
+        model.addAttribute("groupList", groupsService.findAllGroups());
+        model.addAttribute("sectionList", sectionService.findAllSections());
+        return "queries/12";
+    }
+
+    @PostMapping("/12")
+    public String getTouristByInstructor(
+            @RequestParam(required = false) Integer groupId,
+            @RequestParam(required = false) Integer sectionId,
+            Model model) {
+        log.info("Executing query: 12");
+
+        List<Map<String, Object>> lines = queriesService.getTouristByInstructor(groupId, sectionId);
+
+        model.addAttribute("lines", lines);
+        model.addAttribute("headers", lines.isEmpty() ? List.of() : new ArrayList<>(lines.get(0).keySet()));
+
+        log.info("Executed query: 12");
+
+        model.addAttribute("groupList", groupsService.findAllGroups());
+        model.addAttribute("sectionList", sectionService.findAllSections());
+        return "queries/12";
     }
 }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Запросы</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div class="container">
+    <h3 class="mt-4">Получить список туpистов из указанной секции, гpуппы, котоpые ходили в походы со своим тpенеpом в качестве инстpуктоpа.</h3>
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <h4>Фильтры</h4>
+            <form action="/query/12" method="post">
+                <!---------------------------------------------------------------------------------------------------------->
+                <div class="form-group">
+                    <label for="sectionId">Секция:</label>
+                    <select class="form-control" id="sectionId" name="sectionId">
+                        <option value="">Любая</option>
+                        <option th:each="section : ${sectionList}"
+                                th:value="${section.id}"
+                                th:text="${section.name}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="groupId">Группа:</label>
+                    <select class="form-control" id="groupId" name="groupId">
+                        <option value="">Любая</option>
+                        <option th:each="group : ${groupList}"
+                                th:value="${group.id}"
+                                th:text="${group.name}">
+                        </option>
+                    </select>
+                </div>
+                <!---------------------------------------------------------------------------------------------------------->
+                <div class="d-flex justify-content-between mt-1">
+                    <a href="/query" class="btn btn-back">Назад</a>
+                    <button type="submit" class="btn btn-find">Найти</button>
+                </div>
+                <a href="/" class="btn btn-main-menu btn-block mt-4">Главное меню</a>
+            </form>
+        </div>
+        <div class="col-md-9">
+            <h4>Количество туристов: <span id="touristCount" th:text="${count}">0</span></h4>
+            <div id="touristList" class="mt-4">
+                <h5>Результаты</h5>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th th:each="header : ${headers}">[[${header}]]</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="line : ${lines}">
+                        <td th:each="field : ${line.values()}" th:text="${field}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
