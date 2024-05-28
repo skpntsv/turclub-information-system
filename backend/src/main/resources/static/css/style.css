@@ -1,0 +1,38 @@
+/* style.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+h1 {
+    color: #2a69a6;
+}
+
+.table th, .table td {
+    text-align: center;
+}
+
+.btn-primary {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+}
+
+.btn-back {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-find {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-main-menu {
+    background-color: #28a745;
+    color: white;
+}
