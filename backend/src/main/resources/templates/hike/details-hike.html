@@ -53,6 +53,7 @@
                 <input type="text" class="form-control" id="route" th:value="${hike.route != null ? hike.route.name + ' - Категория: ' + hike.route.difficultyCategory : 'Не выбран'}" readonly />
             </div>
             <div class="mt-4">
+                <a th:href="@{'/hike/tourists/' + ${hike.id}}" class="btn btn-warning">Список участников</a>
                 <a th:href="@{'/hike/edit/' + ${hike.id}}" class="btn btn-warning">Редактировать</a>
                 <a th:href="@{'/hike/delete/' + ${hike.id}}" class="btn btn-danger">Удалить</a>
             </div>

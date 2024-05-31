@@ -5,7 +5,9 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.nsu.skopintsev.turclub.mapper.HikeRowMapper;
+import ru.nsu.skopintsev.turclub.mapper.TouristRowMapper;
 import ru.nsu.skopintsev.turclub.models.Hike;
+import ru.nsu.skopintsev.turclub.models.Tourist;
 
 import java.util.List;
 
@@ -91,5 +93,17 @@ public class HikeDAO implements DAO<Hike, Integer> {
         if (hike.getName().isEmpty()) {
             hike.setName(null);
         }
+    }
+
+    public List<Tourist> findAllTouristsByHikeId(Integer hikeId) {
+        String sql = "SELECT t.id, t.full_name, t.gender, t.birthday, t.category, " +
+                "tt.id as type_id, tt.name as type_name, " +
+                "c.id as contact_id, c.email, c.main_phone, c.reserve_phone, c.emergency_phone " +
+                "FROM hike_tourists ht " +
+                "JOIN tourist t ON ht.tourist_id = t.id " +
+                "JOIN tourist_type tt ON t.type_id = tt.id " +
+                "JOIN contacts c ON t.contact_id = c.id " +
+                "WHERE ht.hike_id = ?";
+        return jdbcTemplate.query(sql, new TouristRowMapper(), hikeId);
     }
 }

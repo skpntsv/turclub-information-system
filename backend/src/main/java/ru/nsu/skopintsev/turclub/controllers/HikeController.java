@@ -108,4 +108,13 @@ public class HikeController {
 
         return "redirect:/hike";
     }
+
+    @GetMapping("/tourists/{id}")
+    public String showHikesForTourist(@PathVariable("id") Integer id,
+                                      Model model) {
+        model.addAttribute("listOfTourists", hikeService.findAllTouristsByHikeId(id));
+        model.addAttribute("hikeId", id);
+
+        return "hike/tourist/list-tourist-by-hike";
+    }
 }
