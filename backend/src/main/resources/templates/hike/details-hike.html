@@ -1,10 +1,67 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Просмотр похода</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<div class="container">
+    <h1 class="mt-4">Информация о походе</h1>
 
+    <!-- Проверка наличия ошибки -->
+    <div th:if="${error}" class="alert alert-danger">
+        <p th:text="${error}"></p>
+        <div th:if="${suggestFix}">
+            <a th:href="@{'/hike/edit/' + ${hike.id}}" class="btn btn-primary">Редактировать поход</a>
+        </div>
+    </div>
+
+    <div th:if="${error == null}">
+        <div class="mt-4">
+            <div class="form-group">
+                <label for="fullName">Название похода:</label>
+                <input type="text" class="form-control" id="fullName" th:value="${hike.name != null ? hike.name : 'Не заполнено'}" readonly />
+            </div>
+            <div class="form-group">
+                <label for="instructor">Инструктор:</label>
+                <input type="text" class="form-control" id="instructor" th:value="${hike.tourist != null ? hike.tourist.fullName + ' - ' + hike.tourist.type.name + ' - Категория: ' + hike.tourist.category : 'Не назначен'}" readonly />
+            </div>
+            <div class="form-group">
+                <label for="planStartDate">Запланированная дата начала:</label>
+                <input type="text" class="form-control" id="planStartDate" th:value="${hike.planStartDate != null ? #dates.format(hike.planStartDate, 'dd.MM.yyyy') : 'Не заполнено'}" readonly />
+            </div>
+            <div class="form-group">
+                <label for="realStartDate">Реальная дата начала:</label>
+                <input type="text" class="form-control" id="realStartDate" th:value="${hike.realStartDate != null ? #dates.format(hike.realStartDate, 'dd.MM.yyyy') : 'Не заполнено'}" readonly />
+            </div>
+            <div class="form-group">
+                <label for="realEndDate">Реальная дата окончания:</label>
+                <input type="text" class="form-control" id="realEndDate" th:value="${hike.realEndDate != null ? #dates.format(hike.realEndDate, 'dd.MM.yyyy') : 'Не заполнено'}" readonly />
+            </div>
+            <div class="form-group">
+                <label for="isPlanned">Плановый/неплановый:</label>
+                <input type="text" class="form-control" id="isPlanned" th:value="${hike.isPlanned ? 'Плановый' : 'Неплановый'}" readonly />
+            </div>
+            <div class="form-group">
+                <label for="hikeType">Тип похода:</label>
+                <input type="text" class="form-control" id="hikeType" th:value="${hike.hikeType != null ? hike.hikeType.name : 'Не заполнено'}" readonly />
+            </div>
+            <div class="form-group">
+                <label for="route">Маршрут:</label>
+                <input type="text" class="form-control" id="route" th:value="${hike.route != null ? hike.route.name + ' - Категория: ' + hike.route.difficultyCategory : 'Не выбран'}" readonly />
+            </div>
+            <div class="mt-4">
+                <a th:href="@{'/hike/edit/' + ${hike.id}}" class="btn btn-warning">Редактировать</a>
+                <a th:href="@{'/hike/delete/' + ${hike.id}}" class="btn btn-danger">Удалить</a>
+            </div>
+        </div>
+    </div>
+    <a href="/hike" class="btn btn-secondary mt-3">Вернуться к списку походов</a>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

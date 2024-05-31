@@ -40,6 +40,7 @@ public class HikeRowMapper implements RowMapper<Hike> {
         route.setId(rs.getInt("route_id"));
         route.setName(rs.getString("route_name"));
         route.setLengthMeters(rs.getInt("length_meters"));
+        route.setDifficultyCategory(rs.getInt("difficulty_category"));
         hike.setRoute(route);
 
         return hike;

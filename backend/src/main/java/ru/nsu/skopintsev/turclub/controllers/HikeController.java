@@ -35,6 +35,9 @@ public class HikeController {
     @GetMapping("/details/{id}")
     public String detailsHike(@PathVariable Integer id, Model model) {
         model.addAttribute("hike", hikeService.findHikeById(id));
+//        model.addAttribute("hikeTypeList", hikeService.findAllHikeTypes());
+//        model.addAttribute("routeList", routeService.findAllRoutes());
+//        model.addAttribute("instructorList", touristDAO.findAllInstructors());
 
         return "hike/details-hike";
     }
@@ -42,6 +45,9 @@ public class HikeController {
     @GetMapping("/new")
     public String showNewForm(Model model) {
         model.addAttribute("hike", new Hike());
+        model.addAttribute("hikeTypeList", hikeService.findAllHikeTypes());
+        model.addAttribute("routeList", routeService.findAllRoutes());
+        model.addAttribute("instructorList", touristDAO.findAllInstructors());
 
         return "hike/add-hike";
     }

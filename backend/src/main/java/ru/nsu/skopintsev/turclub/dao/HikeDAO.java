@@ -23,7 +23,8 @@ public class HikeDAO implements DAO<Hike, Integer> {
         String sql = "SELECT h.id AS hike_id, h.name AS hike_name, h.plan_start_date, h.real_start_date, h.real_end_date, h.is_planned, " +
                 "ht.id AS hike_type_id, ht.name AS hike_type_name, " +
                 "t.id AS tourist_id, t.full_name, tt.id AS type_id, tt.name AS type_name, " +
-                "r.id AS route_id, r.name AS route_name, r.length_meters " +
+                "r.id AS route_id, r.name AS route_name, r.length_meters AS length_meters, " +
+                "r.difficulty_category AS difficulty_category " +
                 "FROM hike h " +
                 "JOIN hike_type ht ON h.hike_type_id = ht.id " +
                 "JOIN tourist t ON h.instructor_id = t.id " +
@@ -37,7 +38,8 @@ public class HikeDAO implements DAO<Hike, Integer> {
         String sql = "SELECT h.id AS hike_id, h.name AS hike_name, h.plan_start_date, h.real_start_date, h.real_end_date, h.is_planned, " +
                 "ht.id AS hike_type_id, ht.name AS hike_type_name, " +
                 "t.id AS tourist_id, t.full_name, tt.id AS type_id, tt.name AS type_name, " +
-                "r.id AS route_id, r.name AS route_name, r.length_meters " +
+                "r.id AS route_id, r.name AS route_name, r.length_meters, " +
+                "r.difficulty_category AS difficulty_category " +
                 "FROM hike h " +
                 "JOIN hike_type ht ON h.hike_type_id = ht.id " +
                 "JOIN tourist t ON h.instructor_id = t.id " +
