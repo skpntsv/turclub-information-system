@@ -40,6 +40,7 @@ public class HikeService {
 
     public void saveHike(Hike hike) {
         try {
+            hike.setIsPlanned(false);
             hikeDAO.save(hike);
         } catch (Exception e) {
             log.error("Error saving hike: {}", hike, e);

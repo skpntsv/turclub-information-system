@@ -1,16 +1,22 @@
 package ru.nsu.skopintsev.turclub.models;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Data
 public class Hike {
     private Integer id;
     private String name;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date planStartDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date realStartDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date realEndDate;
+
     private Boolean isPlanned;
 
     private HikeType hikeType;

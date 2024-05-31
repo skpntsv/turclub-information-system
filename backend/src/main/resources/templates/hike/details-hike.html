@@ -30,15 +30,15 @@
             </div>
             <div class="form-group">
                 <label for="planStartDate">Запланированная дата начала:</label>
-                <input type="text" class="form-control" id="planStartDate" th:value="${hike.planStartDate != null ? #dates.format(hike.planStartDate, 'dd.MM.yyyy') : 'Не заполнено'}" readonly />
+                <input type="text" class="form-control" id="planStartDate" th:value="${hike.planStartDate != null ? #dates.format(hike.planStartDate, 'dd-MM-yyyy HH:mm') : 'Не заполнено'}" readonly />
             </div>
             <div class="form-group">
                 <label for="realStartDate">Реальная дата начала:</label>
-                <input type="text" class="form-control" id="realStartDate" th:value="${hike.realStartDate != null ? #dates.format(hike.realStartDate, 'dd.MM.yyyy') : 'Не заполнено'}" readonly />
+                <input type="text" class="form-control" id="realStartDate" th:value="${hike.realStartDate != null ? #dates.format(hike.realStartDate, 'dd-MM-yyyy HH:mm') : 'Не заполнено'}" readonly />
             </div>
             <div class="form-group">
                 <label for="realEndDate">Реальная дата окончания:</label>
-                <input type="text" class="form-control" id="realEndDate" th:value="${hike.realEndDate != null ? #dates.format(hike.realEndDate, 'dd.MM.yyyy') : 'Не заполнено'}" readonly />
+                <input type="text" class="form-control" id="realEndDate" th:value="${hike.realEndDate != null ? #dates.format(hike.realEndDate, 'dd-MM-yyyy HH:mm') : 'Не заполнено'}" readonly />
             </div>
             <div class="form-group">
                 <label for="isPlanned">Плановый/неплановый:</label>

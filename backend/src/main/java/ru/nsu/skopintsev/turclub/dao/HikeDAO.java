@@ -52,7 +52,8 @@ public class HikeDAO implements DAO<Hike, Integer> {
     @Override
     public int save(Hike hike) {
         return jdbcTemplate.update("INSERT INTO hike (name, plan_start_date, real_start_date, real_end_date, is_planned, hike_type_id, instructor_id, route_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)", hike.getName(),
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                hike.getName(),
                 hike.getPlanStartDate(),
                 hike.getRealStartDate(),
                 hike.getRealEndDate(),
@@ -87,17 +88,8 @@ public class HikeDAO implements DAO<Hike, Integer> {
     }
 
     private void validation(Hike hike) {
-        if (hike.getName() == null || hike.getName().isEmpty()) {
+        if (hike.getName().isEmpty()) {
             hike.setName(null);
-        }
-        if (hike.getPlanStartDate() == null) {
-            hike.setPlanStartDate(null);
-        }
-        if (hike.getRealStartDate() == null) {
-            hike.setRealStartDate(null);
-        }
-        if (hike.getRealEndDate() == null) {
-            hike.setRealEndDate(null);
         }
     }
 }

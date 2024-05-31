@@ -35,9 +35,6 @@ public class HikeController {
     @GetMapping("/details/{id}")
     public String detailsHike(@PathVariable Integer id, Model model) {
         model.addAttribute("hike", hikeService.findHikeById(id));
-//        model.addAttribute("hikeTypeList", hikeService.findAllHikeTypes());
-//        model.addAttribute("routeList", routeService.findAllRoutes());
-//        model.addAttribute("instructorList", touristDAO.findAllInstructors());
 
         return "hike/details-hike";
     }
@@ -53,9 +50,21 @@ public class HikeController {
     }
 
     @PostMapping("/save")
-    public String saveHike(@ModelAttribute("hike") Hike hike) {
-        hikeService.saveHike(hike);
+    public String saveHike(@ModelAttribute("hike") Hike hike,
+                           BindingResult bindingResult,
+                           Model model) {
+        try {
+            hikeService.saveHike(hike);
+        } catch (Exception e) {
+            log.error("Error saving hike", e);
 
+            model.addAttribute("hike", new Hike());
+            model.addAttribute("hikeTypeList", hikeService.findAllHikeTypes());
+            model.addAttribute("routeList", routeService.findAllRoutes());
+            model.addAttribute("instructorList", touristDAO.findAllInstructors());
+            model.addAttribute("error", e.getCause().getMessage());
+            return "hike/add-hike";
+        }
         return "redirect:/hike";
     }
 

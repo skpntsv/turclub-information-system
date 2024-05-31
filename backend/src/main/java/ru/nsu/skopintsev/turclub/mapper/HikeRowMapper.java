@@ -15,9 +15,9 @@ public class HikeRowMapper implements RowMapper<Hike> {
 
         hike.setId(rs.getInt("hike_id"));
         hike.setName(rs.getString("hike_name"));
-        hike.setPlanStartDate(rs.getDate("plan_start_date"));
-        hike.setRealStartDate(rs.getDate("real_start_date"));
-        hike.setRealEndDate(rs.getDate("real_end_date"));
+        hike.setPlanStartDate(rs.getTimestamp("plan_start_date"));
+        hike.setRealStartDate(rs.getTimestamp("real_start_date"));
+        hike.setRealEndDate(rs.getTimestamp("real_end_date"));
         hike.setIsPlanned(rs.getBoolean("is_planned"));
 
         Hike.HikeType hikeType = new Hike.HikeType();
