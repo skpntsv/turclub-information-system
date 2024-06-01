@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nsu.skopintsev.turclub.dao.HikeDAO;
 import ru.nsu.skopintsev.turclub.models.Hike;
+import ru.nsu.skopintsev.turclub.models.Tourist;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class HikeService {
 
     public void saveHike(Hike hike) {
         try {
+            hike.setIsPlanned(false);
             hikeDAO.save(hike);
         } catch (Exception e) {
             log.error("Error saving hike: {}", hike, e);
@@ -70,6 +72,15 @@ public class HikeService {
             return hikeDAO.findAllHikeTypes();
         } catch (Exception e) {
             log.error("Error fetching all hike types", e);
+            throw e;
+        }
+    }
+
+    public List<Tourist> findAllTouristsByHikeId(Integer hikeId) {
+        try {
+            return hikeDAO.findAllTouristsByHikeId(hikeId);
+        } catch (Exception e) {
+            log.error("Error fetching findAllTouristsByHikeId by hikeId: {}", hikeId, e);
             throw e;
         }
     }

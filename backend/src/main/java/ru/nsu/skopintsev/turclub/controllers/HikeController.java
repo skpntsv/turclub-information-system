@@ -42,14 +42,29 @@ public class HikeController {
     @GetMapping("/new")
     public String showNewForm(Model model) {
         model.addAttribute("hike", new Hike());
+        model.addAttribute("hikeTypeList", hikeService.findAllHikeTypes());
+        model.addAttribute("routeList", routeService.findAllRoutes());
+        model.addAttribute("instructorList", touristDAO.findAllInstructors());
 
         return "hike/add-hike";
     }
 
     @PostMapping("/save")
-    public String saveHike(@ModelAttribute("hike") Hike hike) {
-        hikeService.saveHike(hike);
+    public String saveHike(@ModelAttribute("hike") Hike hike,
+                           BindingResult bindingResult,
+                           Model model) {
+        try {
+            hikeService.saveHike(hike);
+        } catch (Exception e) {
+            log.error("Error saving hike", e);
 
+            model.addAttribute("hike", new Hike());
+            model.addAttribute("hikeTypeList", hikeService.findAllHikeTypes());
+            model.addAttribute("routeList", routeService.findAllRoutes());
+            model.addAttribute("instructorList", touristDAO.findAllInstructors());
+            model.addAttribute("error", e.getCause().getMessage());
+            return "hike/add-hike";
+        }
         return "redirect:/hike";
     }
 
@@ -92,5 +107,14 @@ public class HikeController {
         hikeService.deleteHikeById(id);
 
         return "redirect:/hike";
+    }
+
+    @GetMapping("/tourists/{id}")
+    public String showHikesForTourist(@PathVariable("id") Integer id,
+                                      Model model) {
+        model.addAttribute("listOfTourists", hikeService.findAllTouristsByHikeId(id));
+        model.addAttribute("hikeId", id);
+
+        return "hike/tourist/list-tourist-by-hike";
     }
 }

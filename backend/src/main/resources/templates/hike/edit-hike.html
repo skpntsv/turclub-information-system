@@ -39,15 +39,15 @@
             </div>
             <div class="form-group">
                 <label for="planStartDate">Запланированная дата начала:</label>
-                <input type="date" class="form-control" id="planStartDate" name="hike.planStartDate" th:field="${hike.planStartDate}" required/>
+                <input type="datetime-local" class="form-control" id="planStartDate" name="hike.planStartDate" th:field="${hike.planStartDate}" required/>
             </div>
             <div class="form-group">
                 <label for="realStartDate">Реальная дата начала:</label>
-                <input type="date" class="form-control" id="realStartDate" name="hike.realStartDate" th:field="${hike.realStartDate}" />
+                <input type="datetime-local" class="form-control" id="realStartDate" name="hike.realStartDate" th:field="${hike.realStartDate}" />
             </div>
             <div class="form-group">
                 <label for="realEndDate">Реальная дата окончания:</label>
-                <input type="date" class="form-control" id="realEndDate" name="hike.realEndDate" th:field="${hike.realEndDate}" />
+                <input type="datetime-local" class="form-control" id="realEndDate" name="hike.realEndDate" th:field="${hike.realEndDate}" />
             </div>
             <div class="form-group">
                 <label for="isPlanned">Плановый/неплановый:</label>

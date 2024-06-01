@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Список туристов</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">Список туристов</h1>
+            <table class="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ФИО</th>
+                        <th>Пол</th>
+                        <th>Дата рождения</th>
+                        <th>Категория</th>
+                        <th>Тип</th>
+                        <th>Email</th>
+                        <th>Основной телефон</th>
+                        <th>Резервный телефон</th>
+                        <th>Экстренный телефон</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="tourist : ${listOfTourists}">
+                      <td th:text="${tourist.id}"></td>
+                      <td th:text="${tourist.fullName}"></td>
+                      <td th:text="${tourist.gender}"></td>
+                      <td th:text="${#dates.format(tourist.birthday, 'dd-MM-yyyy')}"></td>
+                      <td th:text="${tourist.category}"></td>
+                      <td th:text="${tourist.type.name}"></td>
+                      <td th:text="${tourist.contacts.email}"></td>
+                      <td th:text="${tourist.contacts.mainPhone}"></td>
+                      <td th:text="${tourist.contacts.reservePhone}"></td>
+                      <td th:text="${tourist.contacts.emergencyPhone}"></td>
+                    </tr>
+                </tbody>
+              </table>
+      <a th:href="@{'/hike' + ${hikeId} + '/new-tourist'}" class="btn btn-primary" disabled="">Добавить нового участника</a>
+      <a th:href="@{'/hike/details/' + ${hikeId}}" class="btn btn-back">Назад</a>
+      <a href="/" class="btn btn-main-menu btn-block mt-4">Главное меню</a>
+    </div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

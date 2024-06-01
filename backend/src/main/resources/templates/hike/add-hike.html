@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление нового похода</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-4">Добавить новый поход</h1>
+    <form th:action="@{/hike/save}" method="post" class="mt-4">
+        <div class="form-group">
+            <label for="name">Название похода:</label>
+            <input type="text" class="form-control" id="name" name="name" th:field="${hike.name}" required/>
+        </div>
+        <div class="form-group">
+            <label for="instructor">Инструктор:</label>
+            <select class="form-control" id="instructor" name="tourist.id" th:field="${hike.tourist.id}" required>
+                <option value="" disabled>Выберите инструктора</option>
+                <option th:each="instructor : ${instructorList}"
+                        th:value="${instructor.id}"
+                        th:text="${instructor.fullName} + '-' + ${instructor.type.name} + '- Категория:' + ${instructor.category}"
+                        th:selected="${instructor.id} == ${hike.tourist.id}">
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="planStartDate">Запланированная дата начала:</label>
+            <input type="datetime-local" class="form-control" id="planStartDate" name="planStartDate" required/>
+        </div>
+        <div class="form-group">
+            <label for="realStartDate">Реальная дата начала:</label>
+            <input type="datetime-local" class="form-control" id="realStartDate" name="realStartDate"/>
+        </div>
+        <div class="form-group">
+            <label for="realEndDate">Реальная дата окончания:</label>
+            <input type="datetime-local" class="form-control" id="realEndDate" name="realEndDate"/>
+        </div>
+        <input type="hidden" th:field="${hike.isPlanned}" name="isPlanned">
+<!--        <div class="form-group">-->
+<!--            <label for="isPlanned">Плановый/неплановый:</label>-->
+<!--            <input type="checkbox" class="form-control" id="isPlanned" name="isPlanned" th:checked="${hike.isPlanned}"/>-->
+<!--        </div>-->
+        <div class="form-group">
+            <label for="hikeType">Тип похода:</label>
+            <select class="form-control" id="hikeType" name="hikeType.id" th:field="${hike.hikeType.id}" required>
+                <option value="" disabled>Выберите тип похода</option>
+                <option th:each="hikeType : ${hikeTypeList}"
+                        th:value="${hikeType.id}"
+                        th:text="${hikeType.name}"
+                        th:selected="${hikeType.id} == ${hike.hikeType.id}">
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="route">Маршрут:</label>
+            <select class="form-control" id="route" name="route.id" th:field="${hike.route.id}" required>
+                <option value="" disabled>Выберите маршрут</option>
+                <option th:each="route : ${routeList}"
+                        th:value="${route.id}"
+                        th:text="${route.name} + '- Категория:' + ${route.difficultyCategory}"
+                        th:selected="${route.id} == ${hike.route.id}">
+                </option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+
+    <!-- Проверка наличия ошибки -->
+    <div th:if="${error}" class="alert alert-danger">
+        <p th:text="${error}"></p>
+        <div th:if="${suggestFix}">
+            <a th:href="@{'/hike/edit/' + ${hike.id}}" class="btn btn-primary">Редактировать поход</a>
+        </div>
+    </div>
+
+    <a href="/hike" class="btn btn-secondary mt-3">Вернуться к списку походов</a>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -35,9 +35,9 @@
             <td th:text="${hike.id}"></td>
             <td th:text="${hike.name}"></td>
             <td th:text="${hike.tourist.fullName}"></td>
-            <td th:text="${#dates.format(hike.planStartDate, 'dd-MM-yyyy')}"></td>
-            <td th:text="${#dates.format(hike.realStartDate, 'dd-MM-yyyy')}"></td>
-            <td th:text="${#dates.format(hike.realEndDate, 'dd-MM-yyyy')}"></td>
+            <td th:text="${#dates.format(hike.planStartDate, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="${#dates.format(hike.realStartDate, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="${#dates.format(hike.realEndDate, 'dd-MM-yyyy HH:mm')}"></td>
             <td th:text="${hike.isPlanned ? '+' : '-'}"></td>
             <td th:text="${hike.hikeType.name}"></td>
             <td th:text="${hike.route.name}"></td>
